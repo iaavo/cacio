@@ -51,6 +51,10 @@ import javax.swing.plaf.metal.OceanTheme;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import net.java.openjdk.cacio.monitor.CacioMonitorServerBurster;
+import net.java.openjdk.cacio.provolone.PTPGraphicsEnvironment;
+import net.java.openjdk.cacio.provolone.PTPToolkit;
+
 import java.lang.reflect.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -68,6 +72,20 @@ import java.net.*;
  */
 public class SwingSet2 extends JPanel {
 
+	static {
+		System.setProperty("awt.toolkit", PTPToolkit.class.getName());
+		System.setProperty("java.awt.graphicsenv",
+				PTPGraphicsEnvironment.class.getName());
+		System.setProperty("java.awt.headless", "false");
+		
+		try {
+			new CacioMonitorServerBurster(8081, 125);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+	
     String[] demos = {
       "ButtonDemo",
       "ColorChooserDemo",
