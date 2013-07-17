@@ -48,8 +48,8 @@ public abstract class Transport {
     public static final String FORMAT_PNG_XHR = "png";
     public static final String FORMAT_RLE = "rle";
 
-    String contentType;
-    boolean dataAvailable = false;
+    protected String contentType;
+    protected boolean dataAvailable = false;
 
     public Transport(String contentType) {
 	this.contentType = contentType;

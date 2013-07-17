@@ -54,6 +54,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.java.openjdk.cacio.ctc.CTCRobotPeer;
+
 import sun.awt.peer.cacio.CacioToolkit;
 import sun.awt.peer.cacio.PlatformWindowFactory;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
@@ -116,7 +118,7 @@ public class PTPToolkit extends CacioToolkit {
 
     @Override
     public RobotPeer createRobot(Robot target, GraphicsDevice screen) throws AWTException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new CTCRobotPeer();
     }
 
     @Override

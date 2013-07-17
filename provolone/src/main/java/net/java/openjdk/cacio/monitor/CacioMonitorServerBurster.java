@@ -1,17 +1,11 @@
 package net.java.openjdk.cacio.monitor;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import net.java.openjdk.awt.peer.web.BlitScreenUpdate;
-import net.java.openjdk.awt.peer.web.ScreenUpdate;
 import net.java.openjdk.cacio.provolone.PTPScreen;
 import net.java.openjdk.cacio.servlet.transport.Transport;
 
@@ -23,7 +17,7 @@ public class CacioMonitorServerBurster {
 
 	public static final double FPS = 0.1;
 
-	public CacioMonitorServerBurster() {
+	public CacioMonitorServerBurster(int port, int j) {
 		this.thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -65,31 +59,8 @@ public class CacioMonitorServerBurster {
 						
 						Transport encoder = PTPScreen.getInstance().pollForScreenUpdates(15000);
 						
-						if (screenUpdates != null) {
-							// Send number of images
-							System.out.println("Send images");
-							os.write(intToByteArray(screenUpdates.size()));
-							for (ScreenUpdate screenUpdate : screenUpdates) {
-								BlitScreenUpdate update = (BlitScreenUpdate) screenUpdate;
-								update.evacuate();
-								// Send x position of image
-								os.write(intToByteArray(update.getPackedX()));
-								// Send y position of image
-								os.write(intToByteArray(update.getPackedY()));
-								// Send size of the image
-								System.out.println("Send size");
-								ByteArrayOutputStream bScrn = new ByteArrayOutputStream();
-								ImageIO.write(update.getImage(), "PNG", bScrn);
-								byte data[] = bScrn.toByteArray();
-								bScrn.close();
-								int size = data.length;
-								os.write(intToByteArray(size));
-								System.out.println("size sended");
-								// Send Image data
-								os.write(data);
-							}
-							os.flush();
-						}
+						encoder.writeToStream(os);
+						os.flush();
 						// Wait for next image
 						try {
 							Thread.sleep((long) (1000 / FPS));

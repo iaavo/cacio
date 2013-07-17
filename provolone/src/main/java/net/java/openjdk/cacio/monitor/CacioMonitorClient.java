@@ -107,21 +107,20 @@ public class CacioMonitorClient {
 					try {
 						setStatus("Receive Image...");
 						InputStream is = socket.getInputStream();
-						// Receive number of the images
-						int number = readInt(is);
-						for (int i = 0; i < number; i++) {
-							// Receive position of the image
-							System.out.println("Receive X Pos");
-							int xPos = readInt(is);
-							System.out.println("Receive Y Pos");
-							int yPos = readInt(is);
-							// Receive size of the image
+						// Receive the type of update
+						int type = readInt(is);
+						if (type == 0) {
+							int x1 = readInt(is);
+							int y1 = readInt(is);
+							int x2 = readInt(is);
+							int y2 = readInt(is);
+							int packedX = readInt(is);
+							int packedY = readInt(is);
 							int size = readInt(is);
 							if (size < 0) {
 								throw new IOException(
 										"Insufficient data in stream");
 							}
-							appendStatus(" Bytes=" + size);
 							// Receive Image data
 							byte[] data = new byte[size];
 							int index = 0;
@@ -138,12 +137,10 @@ public class CacioMonitorClient {
 							// Set the image
 							BufferedImage image = ImageIO
 									.read(new ByteArrayInputStream(data));
-							System.out.println("Xpos: " + xPos + " Ypos: "
-									+ yPos);
-							completeImage.getGraphics().drawImage(image, xPos,
-									yPos, null);
+							completeImage.getGraphics().drawImage(image, x1,
+									y1, null);
 						}
-						is.close();
+						// is.close();
 						System.out.println("Painted");
 
 						this.panel.repaint();
