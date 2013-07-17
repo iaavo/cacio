@@ -23,7 +23,7 @@
  * questions.
  */
 
-package net.java.openjdk.cacio.provolone;
+package net.java.openjdk.awt.peer.web;
 
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -82,8 +82,4 @@ public class PTPScreen extends WebScreen {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	protected Transport getEncoder() {
-		return new PNGTransport();
-	}
 }

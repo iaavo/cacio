@@ -25,12 +25,17 @@
 
 package net.java.openjdk.awt.peer.web;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.lang.ref.*;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
+import java.awt.image.ColorModel;
+import java.awt.image.DirectColorModel;
+import java.lang.ref.WeakReference;
 
-import net.java.openjdk.cacio.servlet.*;
+import net.java.openjdk.cacio.servlet.WebSessionManager;
 
 /**
  * GraphicConfiguration implementation for caciocavallo-web.
@@ -57,7 +62,7 @@ public class WebGraphicsConfiguration extends GraphicsConfiguration {
 	 * A strong reference is held by WebSessionState, so as long as
 	 * the session is valid, we have a reference to the WebScreen.
 	 */
-	WebScreen screen = new WebScreen(this);
+	WebScreen screen = (WebScreen) new PTPScreen(this);
 	screenRef = new WeakReference<WebScreen>(screen);
 	WebSessionManager.getInstance().getCurrentState().setScreen(screen);
     }
