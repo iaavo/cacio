@@ -75,7 +75,7 @@ public class CacioMonitorServer {
             }
             os.flush();
             // Wait for next image
-            Thread.sleep(1 / FPS);
+            Thread.sleep(1000 / FPS);
           } catch (SocketException e) {
             try {
               socket.close();

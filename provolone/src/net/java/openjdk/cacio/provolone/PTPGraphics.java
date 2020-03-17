@@ -30,6 +30,8 @@ import net.java.openjdk.awt.peer.web.WebRect;
 
 public class PTPGraphics extends Graphics2D {
 
+  private static boolean lock = false;
+
   private final Graphics2D graphics;
 
   private final GridDamageTracker tracker;
@@ -63,6 +65,8 @@ public class PTPGraphics extends Graphics2D {
   }
 
   private void track(WebRect rect) {
+	  if(lock)
+		  return;
     float[] dstPts = new float[8];
     this.graphics.getTransform().transform(new float[] {rect.getX1(),
                                                         rect.getY1(),
@@ -443,13 +447,13 @@ public class PTPGraphics extends Graphics2D {
   public boolean drawImage(Image img, int x, int y, Color bgcolor, ImageObserver observer) {
     // TODO Observer problems
     track(new WebRect(x, y, x + img.getWidth(observer), y + img.getHeight(observer)));
-    return drawImage(img, x, y, bgcolor, observer);
+    return this.graphics.drawImage(img, x, y, bgcolor, observer);
   }
 
   @Override
   public boolean drawImage(Image img, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
     track(new WebRect(x, y, x + width, y + height));
-    return drawImage(img, x, y, width, height, bgcolor, observer);
+    return this.graphics.drawImage(img, x, y, width, height, bgcolor, observer);
   }
 
   @Override
@@ -464,7 +468,7 @@ public class PTPGraphics extends Graphics2D {
                            int sy2,
                            ImageObserver observer) {
     track(new WebRect(dx1, dy1, dx2, dy2));
-    return drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);
+    return this.graphics.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);
   }
 
   @Override
@@ -480,11 +484,19 @@ public class PTPGraphics extends Graphics2D {
                            Color bgcolor,
                            ImageObserver observer) {
     track(new WebRect(dx1, dy1, dx2, dy2));
-    return drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, bgcolor, observer);
+    return this.graphics.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, bgcolor, observer);
   }
 
   @Override
   public void dispose() {
     this.graphics.dispose();
+  }
+
+  public static void lock() {
+	lock = true;
+  }
+
+  public static void unlock() {
+	lock = false;
   }
 }
