@@ -1,8 +1,6 @@
-
-
 import java.awt.GraphicsEnvironment;
 
-import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
+import net.java.openjdk.cacio.provolone.junit.ProvoloneTestRunner;
 
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.edt.GuiActionRunner;
@@ -14,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(CacioFESTRunner.class)
+@RunWith(ProvoloneTestRunner.class)
 public class SimpleFESTTest {
 
     private FrameFixture ff;
@@ -66,7 +64,7 @@ public class SimpleFESTTest {
     @Test
     @GUITest
     public void testColorChooser() {
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			ff.toggleButton(Matcher.toggleButton("JColorChooser demo")).click();
 		}
 	}

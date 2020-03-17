@@ -5,20 +5,29 @@ import java.awt.GraphicsDevice;
 import java.awt.Robot;
 import java.awt.peer.RobotPeer;
 
+import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
+
 import net.java.openjdk.awt.peer.web.WebToolkit;
 
 public class PTPToolkit extends WebToolkit {
 
-  public PTPToolkit() {
-    super();
-    setDecorateWindows(true);
-    System.setProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel");
-  }
+	public PTPToolkit() {
+		super();
+	}
 
-  @Override
+	@Override
 	public RobotPeer createRobot(Robot target, GraphicsDevice screen)
 			throws AWTException {
 		return new PTPRobotPeer();
 	}
-    
+
+	@Override
+	protected int getScreenWidth() {
+		return FullScreenWindowFactory.getScreenDimension().width;
+	}
+
+	@Override
+	protected int getScreenHeight() {
+		return FullScreenWindowFactory.getScreenDimension().height;
+	}
 }

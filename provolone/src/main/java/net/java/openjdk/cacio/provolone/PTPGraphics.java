@@ -28,6 +28,9 @@ import java.util.Map;
 import net.java.openjdk.awt.peer.web.GridDamageTracker;
 import net.java.openjdk.awt.peer.web.WebRect;
 
+/**
+ * Experimental Class
+ */
 public class PTPGraphics extends Graphics2D {
 
   private static boolean lock = false;
