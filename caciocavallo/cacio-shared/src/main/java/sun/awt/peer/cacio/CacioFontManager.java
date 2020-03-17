@@ -24,23 +24,23 @@
  */
 
 package sun.awt.peer.cacio;
+//
+//import sun.awt.FontConfiguration;
+//import sun.awt.X11FontManager;
+//import sun.font.FcFontConfiguration;
 
-import sun.awt.FontConfiguration;
-import sun.awt.X11FontManager;
-import sun.font.FcFontConfiguration;
+//public class CacioFontManager extends X11FontManager {
+//
+//    @Override
+//    protected FontConfiguration createFontConfiguration() {
+//        FcFontConfiguration fcFontConfig = new FcFontConfiguration(this);
+//        fcFontConfig.init();
+//        return fcFontConfig;
+//    }
+//
+//    @Override
+//    protected String getFontPath(boolean b) {
+//        return "";
+//    }
 
-public class CacioFontManager extends X11FontManager {
-
-    @Override
-    protected FontConfiguration createFontConfiguration() {
-        FcFontConfiguration fcFontConfig = new FcFontConfiguration(this);
-        fcFontConfig.init();
-        return fcFontConfig;
-    }
-
-    @Override
-    protected String getFontPath(boolean b) {
-        return "";
-    }
-
-}
+//}
