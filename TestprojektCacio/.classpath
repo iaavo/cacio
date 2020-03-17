@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/customLookAndFeel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DOPECommons"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/dope.security"/>
+	<classpathentry kind="lib" path="/DOPECommons/config"/>
+	<classpathentry kind="lib" path="/DOPE/config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cacio-basic"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

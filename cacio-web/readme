@@ -1,0 +1,17 @@
+1. Ant Build the build.xml file
+2. Run the run.sh file in the build directory
+3. Open Browser and go to
+	localhost:8080/SessionInitializer?cls=SwingSet2
+	
+
+   Parameters:
+   		format: png or rle (default: rle)
+   		clevel: compression level 0-9 only for png (default: 2)
+   		param0: command line parameter 0
+   		param1: command line parameter 1
+   		param2: command line parameter 2
+   		...
+   		
+   	e.g.
+   	localhost:8080/SessionInitializer?cls=SwingSet2&format=png&clevel=3&param0=AUTO
+   	localhost:8080/SessionInitializer?cls=de.xxx.yyy.Dialog&format=png&param0=AUTO

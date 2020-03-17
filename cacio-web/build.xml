@@ -1,0 +1,98 @@
+<project name="cacio.web" basedir=".">
+
+	<taskdef resource="cpptasks.tasks">
+		<classpath>
+			<pathelement location="${basedir}/antlib/cpptasks-1.0b5.jar" />
+		</classpath>
+	</taskdef>
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${basedir}/antlib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<target name="compile" depends="copy-demo" description="Compiles Java classes and native libraries.">
+		<if>
+			<available file="${basedir}/../cacio-shared/build/cacio-shared-1.1.jar" />
+			<then>
+				<copy todir="${basedir}/build/lib">
+					<fileset file="${basedir}/jetty/*" />
+					<fileset file="${basedir}/lib/servlet-api-3.0.jar" />
+					<fileset file="${basedir}/../cacio-shared/build/cacio-shared-1.1.jar" />
+					<fileset file="${basedir}/lib/keypoint_png.jar" />
+				</copy>
+				<!-- copy the required libs to a lib directory to include them properly in the classpath !-->
+				<jar destfile="${basedir}/build/cacio-web-1.1.jar">
+					<fileset dir="${basedir}/classes" />
+					<fileset dir="${basedir}/resources" />
+					<fileset dir="${basedir}/native">
+						<include name="*.so" />
+						<include name="*.dll" />
+					</fileset>
+					<manifest />
+				</jar>
+			</then>
+			<else>
+				<echo message="${basedir}/../cacio-shared/build/cacio-shared-1.1.jar not found. Please build cacio-shared first." level="error" />
+			</else>
+		</if>
+	</target>
+
+	<target name="copy-demo">
+		<copy todir="${basedir}/build">
+			<fileset dir="${basedir}/demo" />
+		</copy>
+	</target>
+
+	<target name="compile-native">
+		<mkdir dir="${basedir}/build/obj" />
+		<mkdir dir="${basedir}/build/native" />
+		<if>
+			<os family="unix" />
+			<then>
+				<!-- compile for linux !-->
+				<cc objdir="${basedir}/build/obj" outfile="${basedir}/build/native/cacio-web" outtype="shared" subsystem="console" name="gcc">
+					<fileset dir="${basedir}/c">
+					</fileset>
+					<libset libs="pthread" />
+					<defineset>
+						<define name="_GNU_SOURCE" value="1" />
+						<define name="_REENTRANT" />
+						<define name="_JLONG_H_" />
+					</defineset>
+				</cc>
+			</then>
+			<else>
+				<!-- compile for windows !-->
+				<exec dir="${basedir}" executable="cmd" outputproperty="result">
+					<arg line="/c buildNative.bat" />
+				</exec>
+				<echo message="${result}" />
+			</else>
+		</if>
+		<copy todir="${basedir}/native">
+			<fileset dir="${basedir}/build/native">
+				<include name="*.so" />
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!--
+    <target name="create-headers">
+        <mkdir dir="${basedir}/build/headers" />
+	<javah classpath="${basedir}/classes:${basedir}/lib/cacio-shared-1.1.jar"
+               destdir="${basedir}/build/headers"
+               class="net.java.openjdk.awt.peer.web.WebGraphicsEnvironment,
+               net.java.openjdk.awt.peer.web.WebScreen,
+               net.java.openjdk.awt.peer.web.WebSurfaceData,
+               net.java.openjdk.awt.peer.web.WebVolativeSurfaceManager,
+               java.awt.event.MouseEvent" />
+    </target>
+!-->
+
+	<target name="clean">
+		<delete dir="${basedir}/build" />
+	</target>
+</project>

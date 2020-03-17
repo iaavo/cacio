@@ -1,0 +1,16 @@
+syntax: regexp
+^user.properties
+^javadoc
+^build/
+.orig$
+^netbeans/native/build
+^netbeans/native/dist
+^netbeans/tests/build/*
+^test/classes/awtconformance
+private.properties$
+^jetty_libs
+.class$
+.project
+.classpath
+.settings
+/target/

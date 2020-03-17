@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cacio-shared"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jetty-server-8.1.4.v20120524.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-servlet-8.1.4.v20120524.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-8.1.4.v20120524.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-websocket-8.1.4.v20120524.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-3.0.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

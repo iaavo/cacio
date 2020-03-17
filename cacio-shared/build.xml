@@ -1,0 +1,23 @@
+<project name="cacio.shared" default="compile" basedir=".">
+
+	<target name="compile">
+		<condition property="src.os" value="srcLinux">
+			<os family="unix" />
+		</condition>
+		<condition property="src.os" value="srcWin">
+			<os family="windows" />
+		</condition>
+		
+		<mkdir dir="${basedir}/build" />
+		<javac srcdir="${basedir}/${src.os}" destdir="${basedir}/classes" bootclasspath="${java.home}/classes" />
+		<jar basedir="${basedir}/classes" destfile="${basedir}/build/cacio-shared-1.1.jar">
+			<manifest>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${basedir}/build" />
+	</target>
+
+</project>
