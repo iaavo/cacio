@@ -35,6 +35,7 @@ public class PTPGraphics extends Graphics2D {
   private final GridDamageTracker tracker;
 
   public PTPGraphics(Graphics2D graphics, GridDamageTracker damageTracker) {
+    if (graphics == null) throw new NullPointerException("graphics cannot be null.");
     this.graphics = graphics;
     this.tracker = damageTracker;
   }
@@ -48,9 +49,37 @@ public class PTPGraphics extends Graphics2D {
                                                                                           + offsetY);
   }
 
+  private WebRect toWebRect(int[] xPoints, int[] yPoints) {
+    int x1 = Integer.MAX_VALUE, y1 = Integer.MAX_VALUE, x2 = Integer.MIN_VALUE, y2 = Integer.MIN_VALUE;
+    for (int i = 0; i < xPoints.length; i++) {
+      if (xPoints[i] < x1) x1 = xPoints[i];
+      if (xPoints[i] > x2) x2 = xPoints[i];
+    }
+    for (int i = 0; i < yPoints.length; i++) {
+      if (yPoints[i] < y1) y1 = yPoints[i];
+      if (yPoints[i] > y2) y2 = yPoints[i];
+    }
+    return new WebRect(x1, y1, x2, y2);
+  }
+
   private void track(WebRect rect) {
-    System.out.println(rect.getX1() + "," + rect.getY1() + "," + rect.getY1() + "," + rect.getY2());
-    // this.tracker.trackDamageRect(rect);
+    float[] dstPts = new float[8];
+    this.graphics.getTransform().transform(new float[] {rect.getX1(),
+                                                        rect.getY1(),
+                                                        rect.getX2(),
+                                                        rect.getY1(),
+                                                        rect.getX2(),
+                                                        rect.getY2(),
+                                                        rect.getX1(),
+                                                        rect.getY2()},
+                                           0,
+                                           dstPts,
+                                           0,
+                                           4);
+    rect = toWebRect(new int[] {(int)dstPts[0], (int)dstPts[2], (int)dstPts[4], (int)dstPts[6]},
+                     new int[] {(int)dstPts[1], (int)dstPts[3], (int)dstPts[5], (int)dstPts[7]});
+    System.out.println(rect);
+    if (this.tracker != null) this.tracker.trackDamageRect(rect);
   }
 
   @Override
@@ -80,7 +109,7 @@ public class PTPGraphics extends Graphics2D {
   @Override
   public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
     // TODO Auto-generated method stub
-
+    this.graphics.drawRenderableImage(img, xform);
   }
 
   @Override
@@ -171,55 +200,46 @@ public class PTPGraphics extends Graphics2D {
 
   @Override
   public void translate(int x, int y) {
-    // TODO Auto-generated method stub
     this.graphics.translate(x, y);
   }
 
   @Override
   public void translate(double tx, double ty) {
-    // TODO Auto-generated method stub
     this.graphics.translate(tx, ty);
   }
 
   @Override
   public void rotate(double theta) {
-    // TODO Auto-generated method stub
     this.graphics.rotate(theta);
   }
 
   @Override
   public void rotate(double theta, double x, double y) {
-    // TODO Auto-generated method stub
     this.graphics.rotate(theta, x, y);
   }
 
   @Override
   public void scale(double sx, double sy) {
-    // TODO Auto-generated method stub
     this.graphics.scale(sx, sy);
   }
 
   @Override
   public void shear(double shx, double shy) {
-    // TODO Auto-generated method stub
     this.graphics.shear(shx, shy);
   }
 
   @Override
   public void transform(AffineTransform Tx) {
-    // TODO Auto-generated method stub
     this.graphics.transform(Tx);
   }
 
   @Override
   public void setTransform(AffineTransform Tx) {
-    // TODO Auto-generated method stub
     this.graphics.setTransform(Tx);
   }
 
   @Override
   public AffineTransform getTransform() {
-    // TODO Auto-generated method stub
     return this.graphics.getTransform();
   }
 
@@ -390,43 +410,45 @@ public class PTPGraphics extends Graphics2D {
 
   @Override
   public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
+    track(toWebRect(xPoints, yPoints));
     this.graphics.drawPolyline(xPoints, yPoints, nPoints);
-    // TODO Auto-generated method stub
   }
 
   @Override
   public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+    track(toWebRect(xPoints, yPoints));
     this.graphics.drawPolygon(xPoints, yPoints, nPoints);
-    // TODO Auto-generated method stub
   }
 
   @Override
   public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+    track(toWebRect(xPoints, yPoints));
     this.graphics.fillPolygon(xPoints, yPoints, nPoints);
-    // TODO Auto-generated method stub
   }
 
   @Override
   public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-    // TODO
+    // TODO Observer problems
+    track(new WebRect(x, y, x + img.getWidth(observer), y + img.getHeight(observer)));
     return this.graphics.drawImage(img, x, y, observer);
   }
 
   @Override
   public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
-    // TODO Auto-generated method stub
+    track(new WebRect(x, y, x + width, y + height));
     return this.graphics.drawImage(img, x, y, width, height, observer);
   }
 
   @Override
   public boolean drawImage(Image img, int x, int y, Color bgcolor, ImageObserver observer) {
-    // TODO Auto-generated method stub
+    // TODO Observer problems
+    track(new WebRect(x, y, x + img.getWidth(observer), y + img.getHeight(observer)));
     return drawImage(img, x, y, bgcolor, observer);
   }
 
   @Override
   public boolean drawImage(Image img, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
-    // TODO Auto-generated method stub
+    track(new WebRect(x, y, x + width, y + height));
     return drawImage(img, x, y, width, height, bgcolor, observer);
   }
 
@@ -441,7 +463,7 @@ public class PTPGraphics extends Graphics2D {
                            int sx2,
                            int sy2,
                            ImageObserver observer) {
-    // TODO Auto-generated method stub
+    track(new WebRect(dx1, dy1, dx2, dy2));
     return drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);
   }
 
@@ -457,7 +479,7 @@ public class PTPGraphics extends Graphics2D {
                            int sy2,
                            Color bgcolor,
                            ImageObserver observer) {
-    // TODO Auto-generated method stub
+    track(new WebRect(dx1, dy1, dx2, dy2));
     return drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, bgcolor, observer);
   }
 

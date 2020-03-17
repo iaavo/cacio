@@ -15,7 +15,7 @@ public class PTPGraphicsEnvironment extends SunGraphicsEnvironment {
 
   @Override
   public Graphics2D createGraphics(BufferedImage img) {
-    return new PTPGraphics(super.createGraphics(img), null);
+    return new PTPGraphics(super.createGraphics(img), PTPScreen.getInstance().tracker);
   }
 
   @Override

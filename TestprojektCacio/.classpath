@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="/DOPE/config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cacio-basic"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/provolone"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.util.List;
 
+import net.java.openjdk.awt.peer.web.GridDamageTracker;
+import net.java.openjdk.cacio.monitor.CacioMonitorServerBurster;
 import sun.awt.peer.cacio.WindowClippedGraphics;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
 import sun.awt.peer.cacio.managed.PlatformScreen;
@@ -21,6 +23,8 @@ public class PTPScreen implements PlatformScreen {
   private final BufferedImage screenBuffer;
 
   private static PTPScreen instance;
+
+  public final GridDamageTracker tracker;
 
   static PTPScreen getInstance() {
     if (instance == null) {
@@ -32,6 +36,8 @@ public class PTPScreen implements PlatformScreen {
   private PTPScreen() {
     Dimension d = FullScreenWindowFactory.getScreenDimension();
     this.screenBuffer = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+    this.tracker = new GridDamageTracker(d.width, d.height);
+    new CacioMonitorServerBurster(this.screenBuffer, this.tracker);
   }
 
   @Override

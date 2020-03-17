@@ -10,6 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.java.openjdk.cacio.provolone.PTPGraphicsEnvironment;
+import net.java.openjdk.cacio.provolone.PTPToolkit;
+
 /*
  * icon Systemhaus GmbH
  * www.icongmbh.de
@@ -21,10 +24,11 @@ import javax.swing.JPanel;
  */
 public class Test extends JPanel {
 
-  // static {
-  // System.setProperty("awt.toolkit", BasicToolkit.class.getName());
-  // System.setProperty("java.awt.headless", "false");
-  // }
+  static {
+    System.setProperty("awt.toolkit", PTPToolkit.class.getName());
+    System.setProperty("java.awt.graphicsenv", PTPGraphicsEnvironment.class.getName());
+    System.setProperty("java.awt.headless", "false");
+  }
 
   public final ArrayList<Point> points = new ArrayList<Point>();
 

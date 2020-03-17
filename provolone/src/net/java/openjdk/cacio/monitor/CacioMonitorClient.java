@@ -2,6 +2,7 @@ package net.java.openjdk.cacio.monitor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
@@ -67,7 +68,13 @@ public class CacioMonitorClient {
 
   private void setupGui(JFrame frame) {
     frame.setLayout(new BorderLayout());
-    this.panel = new JLabel();
+    this.panel = new JLabel(){
+      @Override
+      protected void paintComponent(Graphics g) {
+        // TODO Auto-generated method stub
+        super.paintComponent(g);
+      }
+    };
     this.panel.setHorizontalAlignment(SwingConstants.CENTER);
     this.panel.setVerticalAlignment(SwingConstants.CENTER);
     this.panel.setOpaque(true);
@@ -100,26 +107,33 @@ public class CacioMonitorClient {
           try {
             setStatus("Receive Image...");
             InputStream is = socket.getInputStream();
-            // Receive size of the image
-            int size = readInt(is);
-            if (size < 0) {
-              throw new IOException("Insufficient data in stream");
-            }
-            appendStatus(" Bytes=" + size);
-            // Receive Image data
-            byte[] data = new byte[size];
-            int index = 0;
-            while (index < size) {
-              int bytesRead = is.read(data, index, size - index);
-              if (bytesRead < 0) {
+            // Receive number of the images
+            int number = readInt(is);
+            for (int i = 0; i < number; i++) {
+              // Receive position of the image
+              int xPos = readInt(is);
+              int yPos = readInt(is);
+              // Receive size of the image
+              int size = readInt(is);
+              if (size < 0) {
                 throw new IOException("Insufficient data in stream");
               }
-              index += bytesRead;
+              appendStatus(" Bytes=" + size);
+              // Receive Image data
+              byte[] data = new byte[size];
+              int index = 0;
+              while (index < size) {
+                int bytesRead = is.read(data, index, size - index);
+                if (bytesRead < 0) {
+                  throw new IOException("Insufficient data in stream");
+                }
+                index += bytesRead;
+              }
+              appendStatus(" received");
+              // Set the image
+              BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
+              this.panel.setIcon(new ImageIcon(image));
             }
-            appendStatus(" received");
-            // Set the image
-            BufferedImage image = ImageIO.read(new ByteArrayInputStream(data));
-            this.panel.setIcon(new ImageIcon(image));
             this.panel.repaint();
             appendStatus(" and painted.");
           } catch (SocketException e) {

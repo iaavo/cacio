@@ -7,21 +7,29 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class CacioMonitorServer {
+import net.java.openjdk.awt.peer.web.BlitScreenUpdate;
+import net.java.openjdk.awt.peer.web.GridDamageTracker;
+import net.java.openjdk.awt.peer.web.ScreenUpdate;
+
+public class CacioMonitorServerBurster {
 
   private final BufferedImage image;
 
   private final Thread thread;
 
+  private final GridDamageTracker tracker;
+
   public static final int PORT = 3141;
 
-  public static final int FPS = 30;
+  public static final double FPS = 0.1;
 
-  public CacioMonitorServer(BufferedImage image) {
-    this.image = image;
+  public CacioMonitorServerBurster(BufferedImage imgBuffer, GridDamageTracker tracker) {
+    this.image = imgBuffer;
+    this.tracker = tracker;
     this.thread = new Thread(new Runnable(){
       @Override
       public void run() {
@@ -56,9 +64,14 @@ public class CacioMonitorServer {
         while (socket != null && !socket.isClosed() && socket.isConnected()) {
           try {
             OutputStream os = socket.getOutputStream();
+
+            List<ScreenUpdate> screenUpdates = this.tracker.groupDamagedAreas(this.image);
+
             // Send number of images
-            os.write(intToByteArray(1));
-            {
+            os.write(intToByteArray(screenUpdates.size()));
+            for (ScreenUpdate screenUpdate : screenUpdates) {
+              BlitScreenUpdate update = (BlitScreenUpdate) screenUpdate;
+              update.g
               // Send x position of image
               os.write(intToByteArray(0));
               // Send y position of image
@@ -75,7 +88,7 @@ public class CacioMonitorServer {
             }
             os.flush();
             // Wait for next image
-            Thread.sleep(1 / FPS);
+            Thread.sleep((long)(1000 / FPS));
           } catch (SocketException e) {
             try {
               socket.close();
