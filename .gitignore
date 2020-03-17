@@ -1,5 +1,6 @@
-.metadata
+.*/
 *.class
-META-INF
-target
-bin
+META-INF/
+target/
+bin/
+build/
