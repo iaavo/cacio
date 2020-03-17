@@ -56,119 +56,118 @@ import java.util.Map;
 
 class KeyStrokeMappingEN extends AbstractKeyStrokeMapping implements KeyStrokeMapping {
 
-    private Map<AWTKeyStroke, Character> map;
+  private final Map<AWTKeyStroke, Character> map;
 
-    KeyStrokeMappingEN() {
-        map = getDefaultMap();
+  KeyStrokeMappingEN() {
+    this.map = getDefaultMap();
 
-        map.put(keyStroke(VK_0, NO_MASK), '0');
-        map.put(keyStroke(VK_0, SHIFT_MASK), ')');
-        map.put(keyStroke(VK_1, NO_MASK), '1');
-        map.put(keyStroke(VK_1, SHIFT_MASK),'!');
-        map.put(keyStroke(VK_2, NO_MASK), '2');
-        map.put(keyStroke(VK_2, SHIFT_MASK), '@');
-        map.put(keyStroke(VK_3, NO_MASK), '3');
-        map.put(keyStroke(VK_3, SHIFT_MASK),'#');
-        map.put(keyStroke(VK_4, NO_MASK), '4');
-        map.put(keyStroke(VK_4, SHIFT_MASK), '$');
-        map.put(keyStroke(VK_5, NO_MASK), '5');
-        map.put(keyStroke(VK_5, SHIFT_MASK),'%');
-        map.put(keyStroke(VK_6, NO_MASK), '6');
-        map.put(keyStroke(VK_6, SHIFT_MASK), '^');
-        map.put(keyStroke(VK_7, NO_MASK), '7');
-        map.put(keyStroke(VK_7, SHIFT_MASK), '&');
-        map.put(keyStroke(VK_8, NO_MASK), '8');
-        map.put(keyStroke(VK_8, SHIFT_MASK), '*');
-        map.put(keyStroke(VK_9, NO_MASK), '9');
-        map.put(keyStroke(VK_9, SHIFT_MASK), '(');
-        map.put(keyStroke(VK_A, NO_MASK), 'a');
-        map.put(keyStroke(VK_A, SHIFT_MASK), 'A');
-        map.put(keyStroke(VK_B, NO_MASK), 'b');
-        map.put(keyStroke(VK_B, SHIFT_MASK), 'B');
-        map.put(keyStroke(VK_BACK_QUOTE, NO_MASK), '`');
-        map.put(keyStroke(VK_BACK_QUOTE, SHIFT_MASK), '~');
-        map.put(keyStroke(VK_BACK_SLASH, NO_MASK), '\\');
-        map.put(keyStroke(VK_BACK_SLASH, SHIFT_MASK), '|');
-        map.put(keyStroke(VK_C, NO_MASK), 'c');
-        map.put(keyStroke(VK_C, SHIFT_MASK), 'C');
-        map.put(keyStroke(VK_CLOSE_BRACKET, NO_MASK), ']');
-        map.put(keyStroke(VK_CLOSE_BRACKET, SHIFT_MASK), '}');
-        map.put(keyStroke(VK_COMMA, NO_MASK), ',');
-        map.put(keyStroke(VK_COMMA, SHIFT_MASK), '<');
-        map.put(keyStroke(VK_D, NO_MASK),'d');
-        map.put(keyStroke(VK_D, SHIFT_MASK), 'D');
-        map.put(keyStroke(VK_E, NO_MASK), 'e');
-        map.put(keyStroke(VK_E, SHIFT_MASK), 'E');
-        map.put(keyStroke(VK_EQUALS, NO_MASK), '=');
-        map.put(keyStroke(VK_EQUALS, SHIFT_MASK), '+');
-        map.put(keyStroke(VK_F, NO_MASK), 'f');
-        map.put(keyStroke(VK_F, SHIFT_MASK), 'F');
-        map.put(keyStroke(VK_G, NO_MASK), 'g');
-        map.put(keyStroke(VK_G, SHIFT_MASK), 'G');
-        map.put(keyStroke(VK_H, NO_MASK), 'h');
-        map.put(keyStroke(VK_H, SHIFT_MASK), 'H');
-        map.put(keyStroke(VK_I, NO_MASK), 'i');
-        map.put(keyStroke(VK_I, SHIFT_MASK), 'I');
-        map.put(keyStroke(VK_J, NO_MASK), 'j');
-        map.put(keyStroke(VK_J, SHIFT_MASK), 'J');
-        map.put(keyStroke(VK_K, NO_MASK), 'k');
-        map.put(keyStroke(VK_K, SHIFT_MASK), 'K');
-        map.put(keyStroke(VK_L, NO_MASK), 'l');
-        map.put(keyStroke(VK_L, SHIFT_MASK), 'L');
-        map.put(keyStroke(VK_M, NO_MASK), 'm');
-        map.put(keyStroke(VK_M, SHIFT_MASK), 'M');
-        map.put(keyStroke(VK_MINUS, NO_MASK), '-');
-        map.put(keyStroke(VK_MINUS, SHIFT_MASK), '_');
-        map.put(keyStroke(VK_N, NO_MASK), 'n');
-        map.put(keyStroke(VK_N, SHIFT_MASK), 'N');
-        map.put(keyStroke(VK_O, NO_MASK), 'o');
-        map.put(keyStroke(VK_O, SHIFT_MASK), 'O');
-        map.put(keyStroke(VK_OPEN_BRACKET, NO_MASK), '[');
-        map.put(keyStroke(VK_OPEN_BRACKET, SHIFT_MASK), '{');
-        map.put(keyStroke(VK_P, NO_MASK), 'p');
-        map.put(keyStroke(VK_P, SHIFT_MASK), 'P');
-        map.put(keyStroke(VK_PERIOD, NO_MASK), '.');
-        map.put(keyStroke(VK_PERIOD, SHIFT_MASK), '>');
-        map.put(keyStroke(VK_Q, NO_MASK), 'q');
-        map.put(keyStroke(VK_Q, SHIFT_MASK), 'Q');
-        map.put(keyStroke(VK_QUOTE, NO_MASK), '\'');
-        map.put(keyStroke(VK_QUOTE, SHIFT_MASK), '"');
-        map.put(keyStroke(VK_R, NO_MASK), 'r');
-        map.put(keyStroke(VK_R, SHIFT_MASK), 'R');
-        map.put(keyStroke(VK_S, NO_MASK), 's');
-        map.put(keyStroke(VK_S, SHIFT_MASK), 'S');
-        map.put(keyStroke(VK_SEMICOLON, NO_MASK), ';');
-        map.put(keyStroke(VK_SEMICOLON, SHIFT_MASK), ':');
-        map.put(keyStroke(VK_SLASH, NO_MASK), '/');
-        map.put(keyStroke(VK_SLASH, SHIFT_MASK), '?');
-        map.put(keyStroke(VK_SPACE, NO_MASK), ' ');
-        map.put(keyStroke(VK_T, NO_MASK), 't');
-        map.put(keyStroke(VK_T, SHIFT_MASK), 'T');
-        map.put(keyStroke(VK_U, NO_MASK), 'u');
-        map.put(keyStroke(VK_U, SHIFT_MASK), 'U');
-        map.put(keyStroke(VK_V, NO_MASK), 'v');
-        map.put(keyStroke(VK_V, SHIFT_MASK), 'V');
-        map.put(keyStroke(VK_W, NO_MASK), 'w');
-        map.put(keyStroke(VK_W, SHIFT_MASK), 'W');
-        map.put(keyStroke(VK_X, NO_MASK), 'x');
-        map.put(keyStroke(VK_X, SHIFT_MASK), 'X');
-        map.put(keyStroke(VK_Y, NO_MASK), 'y');
-        map.put(keyStroke(VK_Y, SHIFT_MASK), 'Y');
-        map.put(keyStroke(VK_Z, NO_MASK), 'z');
-        map.put(keyStroke(VK_Z, SHIFT_MASK), 'Z');
+    this.map.put(keyStroke(VK_0, NO_MASK), '0');
+    this.map.put(keyStroke(VK_0, SHIFT_MASK), ')');
+    this.map.put(keyStroke(VK_1, NO_MASK), '1');
+    this.map.put(keyStroke(VK_1, SHIFT_MASK), '!');
+    this.map.put(keyStroke(VK_2, NO_MASK), '2');
+    this.map.put(keyStroke(VK_2, SHIFT_MASK), '@');
+    this.map.put(keyStroke(VK_3, NO_MASK), '3');
+    this.map.put(keyStroke(VK_3, SHIFT_MASK), '#');
+    this.map.put(keyStroke(VK_4, NO_MASK), '4');
+    this.map.put(keyStroke(VK_4, SHIFT_MASK), '$');
+    this.map.put(keyStroke(VK_5, NO_MASK), '5');
+    this.map.put(keyStroke(VK_5, SHIFT_MASK), '%');
+    this.map.put(keyStroke(VK_6, NO_MASK), '6');
+    this.map.put(keyStroke(VK_6, SHIFT_MASK), '^');
+    this.map.put(keyStroke(VK_7, NO_MASK), '7');
+    this.map.put(keyStroke(VK_7, SHIFT_MASK), '&');
+    this.map.put(keyStroke(VK_8, NO_MASK), '8');
+    this.map.put(keyStroke(VK_8, SHIFT_MASK), '*');
+    this.map.put(keyStroke(VK_9, NO_MASK), '9');
+    this.map.put(keyStroke(VK_9, SHIFT_MASK), '(');
+    this.map.put(keyStroke(VK_A, NO_MASK), 'a');
+    this.map.put(keyStroke(VK_A, SHIFT_MASK), 'A');
+    this.map.put(keyStroke(VK_B, NO_MASK), 'b');
+    this.map.put(keyStroke(VK_B, SHIFT_MASK), 'B');
+    this.map.put(keyStroke(VK_BACK_QUOTE, NO_MASK), '`');
+    this.map.put(keyStroke(VK_BACK_QUOTE, SHIFT_MASK), '~');
+    this.map.put(keyStroke(VK_BACK_SLASH, NO_MASK), '\\');
+    this.map.put(keyStroke(VK_BACK_SLASH, SHIFT_MASK), '|');
+    this.map.put(keyStroke(VK_C, NO_MASK), 'c');
+    this.map.put(keyStroke(VK_C, SHIFT_MASK), 'C');
+    this.map.put(keyStroke(VK_CLOSE_BRACKET, NO_MASK), ']');
+    this.map.put(keyStroke(VK_CLOSE_BRACKET, SHIFT_MASK), '}');
+    this.map.put(keyStroke(VK_COMMA, NO_MASK), ',');
+    this.map.put(keyStroke(VK_COMMA, SHIFT_MASK), '<');
+    this.map.put(keyStroke(VK_D, NO_MASK), 'd');
+    this.map.put(keyStroke(VK_D, SHIFT_MASK), 'D');
+    this.map.put(keyStroke(VK_E, NO_MASK), 'e');
+    this.map.put(keyStroke(VK_E, SHIFT_MASK), 'E');
+    this.map.put(keyStroke(VK_EQUALS, NO_MASK), '=');
+    this.map.put(keyStroke(VK_EQUALS, SHIFT_MASK), '+');
+    this.map.put(keyStroke(VK_F, NO_MASK), 'f');
+    this.map.put(keyStroke(VK_F, SHIFT_MASK), 'F');
+    this.map.put(keyStroke(VK_G, NO_MASK), 'g');
+    this.map.put(keyStroke(VK_G, SHIFT_MASK), 'G');
+    this.map.put(keyStroke(VK_H, NO_MASK), 'h');
+    this.map.put(keyStroke(VK_H, SHIFT_MASK), 'H');
+    this.map.put(keyStroke(VK_I, NO_MASK), 'i');
+    this.map.put(keyStroke(VK_I, SHIFT_MASK), 'I');
+    this.map.put(keyStroke(VK_J, NO_MASK), 'j');
+    this.map.put(keyStroke(VK_J, SHIFT_MASK), 'J');
+    this.map.put(keyStroke(VK_K, NO_MASK), 'k');
+    this.map.put(keyStroke(VK_K, SHIFT_MASK), 'K');
+    this.map.put(keyStroke(VK_L, NO_MASK), 'l');
+    this.map.put(keyStroke(VK_L, SHIFT_MASK), 'L');
+    this.map.put(keyStroke(VK_M, NO_MASK), 'm');
+    this.map.put(keyStroke(VK_M, SHIFT_MASK), 'M');
+    this.map.put(keyStroke(VK_MINUS, NO_MASK), '-');
+    this.map.put(keyStroke(VK_MINUS, SHIFT_MASK), '_');
+    this.map.put(keyStroke(VK_N, NO_MASK), 'n');
+    this.map.put(keyStroke(VK_N, SHIFT_MASK), 'N');
+    this.map.put(keyStroke(VK_O, NO_MASK), 'o');
+    this.map.put(keyStroke(VK_O, SHIFT_MASK), 'O');
+    this.map.put(keyStroke(VK_OPEN_BRACKET, NO_MASK), '[');
+    this.map.put(keyStroke(VK_OPEN_BRACKET, SHIFT_MASK), '{');
+    this.map.put(keyStroke(VK_P, NO_MASK), 'p');
+    this.map.put(keyStroke(VK_P, SHIFT_MASK), 'P');
+    this.map.put(keyStroke(VK_PERIOD, NO_MASK), '.');
+    this.map.put(keyStroke(VK_PERIOD, SHIFT_MASK), '>');
+    this.map.put(keyStroke(VK_Q, NO_MASK), 'q');
+    this.map.put(keyStroke(VK_Q, SHIFT_MASK), 'Q');
+    this.map.put(keyStroke(VK_QUOTE, NO_MASK), '\'');
+    this.map.put(keyStroke(VK_QUOTE, SHIFT_MASK), '"');
+    this.map.put(keyStroke(VK_R, NO_MASK), 'r');
+    this.map.put(keyStroke(VK_R, SHIFT_MASK), 'R');
+    this.map.put(keyStroke(VK_S, NO_MASK), 's');
+    this.map.put(keyStroke(VK_S, SHIFT_MASK), 'S');
+    this.map.put(keyStroke(VK_SEMICOLON, NO_MASK), ';');
+    this.map.put(keyStroke(VK_SEMICOLON, SHIFT_MASK), ':');
+    this.map.put(keyStroke(VK_SLASH, NO_MASK), '/');
+    this.map.put(keyStroke(VK_SLASH, SHIFT_MASK), '?');
+    this.map.put(keyStroke(VK_SPACE, NO_MASK), ' ');
+    this.map.put(keyStroke(VK_T, NO_MASK), 't');
+    this.map.put(keyStroke(VK_T, SHIFT_MASK), 'T');
+    this.map.put(keyStroke(VK_U, NO_MASK), 'u');
+    this.map.put(keyStroke(VK_U, SHIFT_MASK), 'U');
+    this.map.put(keyStroke(VK_V, NO_MASK), 'v');
+    this.map.put(keyStroke(VK_V, SHIFT_MASK), 'V');
+    this.map.put(keyStroke(VK_W, NO_MASK), 'w');
+    this.map.put(keyStroke(VK_W, SHIFT_MASK), 'W');
+    this.map.put(keyStroke(VK_X, NO_MASK), 'x');
+    this.map.put(keyStroke(VK_X, SHIFT_MASK), 'X');
+    this.map.put(keyStroke(VK_Y, NO_MASK), 'y');
+    this.map.put(keyStroke(VK_Y, SHIFT_MASK), 'Y');
+    this.map.put(keyStroke(VK_Z, NO_MASK), 'z');
+    this.map.put(keyStroke(VK_Z, SHIFT_MASK), 'Z');
 
+  }
+
+  @Override
+  public char getKeyChar(int keyCode, int modifiers) {
+    AWTKeyStroke stroke = keyStroke(keyCode, modifiers);
+    Character ch = this.map.get(stroke);
+    if (ch == null) {
+      return KeyEvent.CHAR_UNDEFINED;
+    } else {
+      return ch.charValue();
     }
+  }
 
-    @Override
-    public char getKeyChar(int keyCode, int modifiers) {
-        AWTKeyStroke stroke = keyStroke(keyCode, modifiers);
-        Character ch = map.get(stroke);
-        if (ch == null) {
-            return KeyEvent.CHAR_UNDEFINED;
-        } else {
-            return ch.charValue();
-        }
-    }
-
-    
 }

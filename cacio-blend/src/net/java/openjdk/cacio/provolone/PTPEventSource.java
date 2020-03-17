@@ -1,4 +1,4 @@
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -6,20 +6,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 import sun.awt.peer.cacio.CacioEventSource;
 import sun.awt.peer.cacio.managed.EventData;
 
-public class CTCEventSource implements CacioEventSource {
+public class PTPEventSource implements CacioEventSource {
 
-  private static CTCEventSource instance;
+  private static PTPEventSource instance;
 
-  static CTCEventSource getInstance() {
+  static PTPEventSource getInstance() {
     if (instance == null) {
-      instance = new CTCEventSource();
+      instance = new PTPEventSource();
     }
     return instance;
   }
 
   private final BlockingQueue<EventData> queue = new LinkedBlockingQueue<EventData>();
 
-  private CTCEventSource() {
+  private PTPEventSource() {
     // Singleton.
   }
 

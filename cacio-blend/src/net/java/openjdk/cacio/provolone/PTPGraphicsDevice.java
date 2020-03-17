@@ -1,11 +1,11 @@
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 
-public class CTCGraphicsDevice extends GraphicsDevice {
+public class PTPGraphicsDevice extends GraphicsDevice {
 
-	private CTCGraphicsConfiguration defaultConfig;
+	private PTPGraphicsConfiguration defaultConfig;
 
 	@Override
 	public int getType() {
@@ -26,7 +26,7 @@ public class CTCGraphicsDevice extends GraphicsDevice {
 	@Override
 	public GraphicsConfiguration getDefaultConfiguration() {
 		if (defaultConfig == null) {
-			defaultConfig = new CTCGraphicsConfiguration(this);
+			defaultConfig = new PTPGraphicsConfiguration(this);
 		}
 		return defaultConfig;
 	}

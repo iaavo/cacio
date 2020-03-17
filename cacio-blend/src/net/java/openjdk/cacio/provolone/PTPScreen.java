@@ -1,4 +1,4 @@
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,20 +16,20 @@ import sun.awt.peer.cacio.WindowClippedGraphics;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
 import sun.awt.peer.cacio.managed.PlatformScreen;
 
-public class CTCScreen implements PlatformScreen {
+public class PTPScreen implements PlatformScreen {
 
   private final BufferedImage screenBuffer;
 
-  private static CTCScreen instance;
+  private static PTPScreen instance;
 
-  static CTCScreen getInstance() {
+  static PTPScreen getInstance() {
     if (instance == null) {
-      instance = new CTCScreen();
+      instance = new PTPScreen();
     }
     return instance;
   }
 
-  private CTCScreen() {
+  private PTPScreen() {
     Dimension d = FullScreenWindowFactory.getScreenDimension();
     this.screenBuffer = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
   }

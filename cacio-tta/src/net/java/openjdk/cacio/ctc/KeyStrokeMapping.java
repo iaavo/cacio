@@ -1,6 +1,6 @@
 package net.java.openjdk.cacio.ctc;
 
-interface KeyStrokeMapping {
+public interface KeyStrokeMapping {
 
-    char getKeyChar(int keyCode, int modifiers);
+  char getKeyChar(int keyCode, int modifiers);
 }

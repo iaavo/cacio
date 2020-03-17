@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cacio-shared"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/cacio-web"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cacio-tta"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

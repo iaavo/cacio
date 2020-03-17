@@ -23,13 +23,13 @@
  * questions.
  */
 
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.awt.event.MouseEvent;
 
 import sun.awt.peer.cacio.managed.EventData;
 
-class MouseClickSupport {
+class PTPMouseClickSupport {
 
     private static final long MULTI_CLICK_THRESHOLD = 400;
 
@@ -72,11 +72,11 @@ class MouseClickSupport {
     private void generateClick(EventData ev) {
         
         ev.setId(MouseEvent.MOUSE_CLICKED);
-        ev.setSource(CTCScreen.getInstance());
+        ev.setSource(PTPScreen.getInstance());
         ev.setTime(System.currentTimeMillis());
         ev.setClickCount(clickCount);
         ev.setPopup(false);
-        CTCEventSource.getInstance().postEvent(ev);
+        PTPEventSource.getInstance().postEvent(ev);
         lastPress = null;
     }
 

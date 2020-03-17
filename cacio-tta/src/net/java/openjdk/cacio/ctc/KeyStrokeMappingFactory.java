@@ -4,27 +4,27 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-class KeyStrokeMappingFactory {
+public class KeyStrokeMappingFactory {
 
-    private static KeyStrokeMappingFactory instance = new KeyStrokeMappingFactory();
+  private static KeyStrokeMappingFactory instance = new KeyStrokeMappingFactory();
 
-    private Map<String,KeyStrokeMapping> maps = new HashMap<String,KeyStrokeMapping>();
+  private final Map<String, KeyStrokeMapping> maps = new HashMap<String, KeyStrokeMapping>();
 
-    static KeyStrokeMappingFactory getInstance() {
-        return instance;
+  public static KeyStrokeMappingFactory getInstance() {
+    return instance;
+  }
+
+  public KeyStrokeMapping getKeyStrokeMapping() {
+    String lang = Locale.getDefault().getCountry().toLowerCase();
+    KeyStrokeMapping mapping = this.maps.get(lang);
+    if (mapping == null) {
+      if (lang.equals("de")) {
+        mapping = new KeyStrokeMappingDE();
+      } else {
+        mapping = new KeyStrokeMappingEN();
+      }
+      this.maps.put(lang, mapping);
     }
-
-    KeyStrokeMapping getKeyStrokeMapping() {
-        String lang = Locale.getDefault().getCountry().toLowerCase();
-        KeyStrokeMapping mapping = maps.get(lang);
-        if (mapping == null) {
-            if (lang.equals("de")) {
-                mapping = new KeyStrokeMappingDE();
-            } else {
-                mapping = new KeyStrokeMappingEN();
-            }
-            maps.put(lang, mapping);
-        }
-        return mapping;
-    }
+    return mapping;
+  }
 }

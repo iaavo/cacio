@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /*
  * icon Systemhaus GmbH
@@ -51,12 +49,12 @@ public class Test extends JPanel {
 
   public static void main(String[] args) {
 
-    try {
-      UIManager.setLookAndFeel("javax.swing.plaf.custom.CustomLookAndFeel");
-    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
+    // try {
+    // UIManager.setLookAndFeel("javax.swing.plaf.custom.CustomLookAndFeel");
+    // } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+    // UnsupportedLookAndFeelException e1) {
+    // e1.printStackTrace();
+    // }
 
     JFrame frame = new JFrame();
     frame.setTitle("EventQueueTest");

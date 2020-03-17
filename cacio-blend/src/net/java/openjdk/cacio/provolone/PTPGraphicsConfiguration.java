@@ -1,4 +1,4 @@
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
@@ -9,11 +9,11 @@ import java.awt.image.ColorModel;
 
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
 
-public class CTCGraphicsConfiguration extends GraphicsConfiguration {
+public class PTPGraphicsConfiguration extends GraphicsConfiguration {
 
-    private CTCGraphicsDevice device;
+    private PTPGraphicsDevice device;
 
-    CTCGraphicsConfiguration(CTCGraphicsDevice dev) {
+    PTPGraphicsConfiguration(PTPGraphicsDevice dev) {
         device = dev;
     }
 

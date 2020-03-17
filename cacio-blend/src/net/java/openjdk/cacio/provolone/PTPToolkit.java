@@ -1,4 +1,4 @@
-package net.java.openjdk.cacio.blend;
+package net.java.openjdk.cacio.provolone;
 
 import java.awt.AWTException;
 import java.awt.Desktop;
@@ -29,7 +29,7 @@ import sun.awt.peer.cacio.CacioToolkit;
 import sun.awt.peer.cacio.PlatformWindowFactory;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
 
-public class BlendToolkit extends CacioToolkit {
+public class PTPToolkit extends CacioToolkit {
 
   private PlatformWindowFactory platformWindowFactory;
 
@@ -41,7 +41,7 @@ public class BlendToolkit extends CacioToolkit {
     // LibraryLoader.loadLibs();
   }
 
-  public BlendToolkit() {
+  public PTPToolkit() {
     super();
     setDecorateWindows(true);
     System.setProperty("swing.defaultlaf", "javax.swing.plaf.metal.MetalLookAndFeel");
@@ -50,8 +50,8 @@ public class BlendToolkit extends CacioToolkit {
   @Override
   public PlatformWindowFactory getPlatformWindowFactory() {
     if (this.platformWindowFactory == null) {
-      CTCScreen screen = CTCScreen.getInstance();
-      CTCEventSource eventSource = CTCEventSource.getInstance();
+      PTPScreen screen = PTPScreen.getInstance();
+      PTPEventSource eventSource = PTPEventSource.getInstance();
       this.platformWindowFactory = new FullScreenWindowFactory(screen, eventSource);
     }
     return this.platformWindowFactory;
@@ -106,7 +106,7 @@ public class BlendToolkit extends CacioToolkit {
 
   @Override
   public RobotPeer createRobot(Robot target, GraphicsDevice screen) throws AWTException {
-    return new CTCRobotPeer();
+    return new PTPRobotPeer();
   }
 
   @Override
