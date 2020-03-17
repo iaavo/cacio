@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: net.java.openjdk.cacio.ctc.SimpleFESTTest
--------------------------------------------------------------------------------
-Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.733 sec
