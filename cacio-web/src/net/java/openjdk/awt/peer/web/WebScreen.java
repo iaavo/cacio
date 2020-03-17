@@ -88,7 +88,6 @@ public class WebScreen implements PlatformScreen {
   }
 
   public Graphics2D getClippedGraphics(Color fg, Color bg, Font font, List<Rectangle> clipRects) {
-
     WebSurfaceData data = getSurfaceData();
     Graphics2D g2d = new SunGraphics2D(data, fg, bg, font);
     if (clipRects != null && clipRects.size() > 0) {
