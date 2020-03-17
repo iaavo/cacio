@@ -48,7 +48,7 @@
 #  define __fastcall /* nothing */
 #endif /* _WIN32 */
 
-extern void JNU_ThrowByName(JNIEnv *env, const char *name, const char *msg);
+//extern void JNU_ThrowByName(JNIEnv *env, const char *name, const char *msg);
 
 jclass sunToolkitCls;
 jmethodID sunToolkitLockMID;
@@ -69,13 +69,13 @@ static void WebRelease(JNIEnv* env, SurfaceDataOps* ops,
 static void WebUnlock(JNIEnv* env, SurfaceDataOps* ops,
                       SurfaceDataRasInfo* rasInfo);
 static void WebDispose(JNIEnv *env, SurfaceDataOps *ops);
-                      
+
 
 JNIEXPORT void JNICALL Java_net_java_openjdk_awt_peer_web_WebSurfaceData_initIDs
   (JNIEnv *env, jclass UNUSED(cls))
 {
 	jclass webSurfaceClsLocal;
-	
+
     sunToolkitCls = (*env)->FindClass(env, "sun/awt/SunToolkit");
     if ((*env)->ExceptionCheck(env)) return;
 
@@ -86,16 +86,16 @@ JNIEXPORT void JNICALL Java_net_java_openjdk_awt_peer_web_WebSurfaceData_initIDs
     sunToolkitUnlockMID = (*env)->GetStaticMethodID(env, sunToolkitCls,
                                                     "awtUnlock", "()V");
     if ((*env)->ExceptionCheck(env)) return;
-    
+
     webSurfaceClsLocal = (*env)->FindClass(env, "net/java/openjdk/awt/peer/web/WebSurfaceData");
     webSurfaceCls = (*env)->NewGlobalRef(env, webSurfaceClsLocal);
-    
+
     dirtyRectMID = (*env)->GetMethodID(env, webSurfaceCls,
                                                     "addDirtyRectAndUnlock", "(IIII)V");
-                                                    
+
     lockSurfaceMID = (*env)->GetMethodID(env, webSurfaceCls,
                                                     "lockSurface", "()V");
-                                                    
+
     unlockSurfaceMID = (*env)->GetMethodID(env, webSurfaceCls,
                                                     "unlockSurface", "()V");
 }
@@ -132,10 +132,10 @@ WebDispose(JNIEnv *env, SurfaceDataOps *ops) {
     }
 }
 
-static void WebRelease(JNIEnv *env, SurfaceDataOps *ops, SurfaceDataRasInfo *rasInfo) {	
+static void WebRelease(JNIEnv *env, SurfaceDataOps *ops, SurfaceDataRasInfo *rasInfo) {
 	jintArray imgBufferLocal;
     WebSurfaceDataOps *operations = (WebSurfaceDataOps*) ops;
-    
+
     if(operations->imgBuffer && !(*env)->IsSameObject(env, operations->imgBuffer, NULL)) {
      (*env)->ReleasePrimitiveArrayCritical(env, operations->imgBuffer, rasInfo->rasBase, JNI_ABORT);
     }
@@ -143,14 +143,14 @@ static void WebRelease(JNIEnv *env, SurfaceDataOps *ops, SurfaceDataRasInfo *ras
 
 static jint WebLock(JNIEnv* env, SurfaceDataOps* ops,
                     SurfaceDataRasInfo* rasInfo, jint lockFlags)
-{	
+{
     WebSurfaceDataOps *operations = (WebSurfaceDataOps*) ops;
     operations->lockFlags = lockFlags;
-    
+
     if((*env)->IsSameObject(env, ops->sdObject, NULL)) {
 		return SD_FAILURE;
 	}
-	
+
 	(*env)->CallVoidMethod(env, ops->sdObject, lockSurfaceMID);
 
     if (rasInfo->bounds.x1 < 0) {
@@ -172,11 +172,11 @@ static jint WebLock(JNIEnv* env, SurfaceDataOps* ops,
     if (rasInfo->bounds.x2 > operations->width) {
       rasInfo->bounds.x2 = operations->width;
     }
-    
+
     if (rasInfo->bounds.y2 > operations->height) {
       rasInfo->bounds.y2 = operations->height;
     }
-   
+
     return SD_SUCCESS;
 }
 
@@ -187,11 +187,11 @@ static void WebGetRasInfo(JNIEnv* env,
     WebSurfaceDataOps *ops = NULL;
     jint *imgPtr = NULL;
     ops = (WebSurfaceDataOps*) opsPtr;
-	
+
     if(ops->imgBuffer &&  !(*env)->IsSameObject(env, ops->imgBuffer, NULL)) {
 	   imgPtr = (jint *) (*env)->GetPrimitiveArrayCritical(env, ops->imgBuffer, NULL);
     }
-    
+
     if (imgPtr != NULL || 1) {
         rasInfo->rasBase = imgPtr;
         rasInfo->pixelStride = 4;
@@ -229,7 +229,7 @@ static void WebUnlock(JNIEnv* env, SurfaceDataOps* ops, SurfaceDataRasInfo* rasI
     if (height < 0) {
         height = 0;
     }
-   
+
    if(!(*env)->IsSameObject(env, ops->sdObject, NULL)) {
 	    if(operations->lockFlags > SD_LOCK_READ) {
 		  (*env)->CallVoidMethod(env, ops->sdObject, dirtyRectMID, rasInfo->bounds.x1, rasInfo->bounds.x1 + width, rasInfo->bounds.y1, rasInfo->bounds.y1 + height);

@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1372440869 source:d:\workspacegsoc\cacio-web\c\websurfacedata.c
+	<jni.h>
+	"cacio-web.h"
+	"SurfaceData.h"
+	"jni_util.h"
+	"Disposer.h"
+	"stdlib.h"
+	"string.h"
+
+1363965650 c:\program files\java\jdk1.7.0_17\include\jni.h
+	<stdio.h>
+	<stdarg.h>
+	"jni_md.h"
+
+1363965650 c:\program files\java\jdk1.7.0_17\include\win32\jni_md.h
+
+1372439806 d:\workspacegsoc\cacio-web\c\cacio-web.h
+	<jni.h>
+	"SurfaceData.h"
+
+1372439806 d:\workspacegsoc\cacio-web\c\surfacedata.h
+	<jni.h>
+
+1372439806 d:\workspacegsoc\cacio-web\c\jni_util.h
+	"jni.h"
+	"jlong.h"
+
+1372439806 d:\workspacegsoc\cacio-web\c\jlong.h
+	"jlong_md.h"
+
+1372439806 d:\workspacegsoc\cacio-web\c\jlong_md.h
+	<stddef.h>
+
+1372439806 d:\workspacegsoc\cacio-web\c\disposer.h
+	"jlong.h"
+
