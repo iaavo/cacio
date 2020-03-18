@@ -62,7 +62,7 @@ public class WebGraphicsConfiguration extends GraphicsConfiguration {
 	 * A strong reference is held by WebSessionState, so as long as
 	 * the session is valid, we have a reference to the WebScreen.
 	 */
-	WebScreen screen = (WebScreen) new PTPScreen(this);
+	WebScreen screen = (WebScreen) new WebScreen(this);
 	screenRef = new WeakReference<WebScreen>(screen);
 	WebSessionManager.getInstance().getCurrentState().setScreen(screen);
     }

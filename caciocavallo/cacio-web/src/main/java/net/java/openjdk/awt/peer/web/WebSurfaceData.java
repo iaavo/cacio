@@ -90,7 +90,6 @@ public class WebSurfaceData extends SurfaceData {
 	imgBufferSD = SurfaceManager.getManager(imgBuffer).getPrimarySurfaceData();
 
 	int imgStride = ((SinglePixelPackedSampleModel) imgBuffer.getSampleModel()).getScanlineStride() * 4;
-	System.out.println("InitOps");
 	initOps(data, w, h, imgStride);
     }
 

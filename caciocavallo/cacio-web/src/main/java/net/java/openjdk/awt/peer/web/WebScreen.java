@@ -25,25 +25,30 @@
 
 package net.java.openjdk.awt.peer.web;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.Rectangle;
+import java.awt.geom.Area;
+import java.awt.image.ColorModel;
+import java.awt.image.Raster;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
-import javax.servlet.http.*;
-
-import net.java.openjdk.cacio.servlet.*;
-import net.java.openjdk.cacio.servlet.transport.*;
-import sun.awt.*;
-import sun.awt.peer.cacio.*;
-import sun.awt.peer.cacio.managed.*;
-import sun.java2d.*;
-
+import net.java.openjdk.cacio.servlet.WebSessionManager;
+import net.java.openjdk.cacio.servlet.transport.Transport;
+import sun.awt.SunToolkit;
+import sun.awt.peer.cacio.WindowClippedGraphics;
+import sun.awt.peer.cacio.managed.EventData;
+import sun.awt.peer.cacio.managed.PlatformScreen;
+import sun.awt.peer.cacio.managed.ScreenManagedWindowContainer;
+import sun.java2d.SunGraphics2D;
+import sun.java2d.SurfaceData;
 /**
  * Screen Implementation for Caciocavallo-Web.
  * 
@@ -55,257 +60,274 @@ import sun.java2d.*;
  */
 public class WebScreen implements PlatformScreen {
 
-    private int width;
-    private int height;
+	private int width;
+	private int height;
 
-    WebGraphicsConfiguration config;
+	WebGraphicsConfiguration config;
 
-    ReentrantLock screenLock;
-    Condition screenCondition;
+	ReentrantLock screenLock;
+	Condition screenCondition;
 
-    ArrayList<ScreenUpdate> pendingUpdateList;
-    Transport encoder;
+	ArrayList<ScreenUpdate> pendingUpdateList;
+	Transport encoder;
 
-    private EventData eventData;
-    private WebSurfaceData surfaceData;
+	private EventData eventData;
+	private WebSurfaceData surfaceData;
 
-    protected WebScreen(WebGraphicsConfiguration config) {
-	this.config = config;
+	protected WebScreen(WebGraphicsConfiguration config) {
+		this.config = config;
 
-	WebSessionState state = WebSessionManager.getInstance().getCurrentStateAWT();
-	width = state.getInitialScreenDimension().width;
-	width = width > 0 ? width : 1;
-	height = height > 0 ? height : 1;
+		WebSessionState state = WebSessionManager.getInstance()
+				.getCurrentStateAWT();
+		width = state.getInitialScreenDimension().width;
+		width = width > 0 ? width : 1;
+		height = height > 0 ? height : 1;
 
-	height = state.getInitialScreenDimension().height;
+		height = state.getInitialScreenDimension().height;
 
-	screenLock = new ReentrantLock();
-	screenCondition = screenLock.newCondition();
-	pendingUpdateList = new ArrayList<ScreenUpdate>();
-    }
-
-    public WebScreen() {
-    	screenLock = new ReentrantLock();
-    	screenCondition = screenLock.newCondition();
-    	pendingUpdateList = new ArrayList<ScreenUpdate>();
+		screenLock = new ReentrantLock();
+		screenCondition = screenLock.newCondition();
+		pendingUpdateList = new ArrayList<ScreenUpdate>();
 	}
 
-	public Graphics2D getClippedGraphics(Color fg, Color bg, Font font, List<Rectangle> clipRects) {
-
-	WebSurfaceData data = getSurfaceData();
-	Graphics2D g2d = new SunGraphics2D(data, fg, bg, font);
-	if (clipRects != null && clipRects.size() > 0) {
-	    Area a = new Area(getBounds());
-	    for (Rectangle clip : clipRects) {
-		a.subtract(new Area(clip));
-	    }
-	    g2d = new WindowClippedGraphics(g2d, a);
-	}
-	return g2d;
-    }
-
-    public ColorModel getColorModel() {
-	return getGraphicsConfiguration().getColorModel();
-    }
-
-    public GraphicsConfiguration getGraphicsConfiguration() {
-	return config;
-    }
-
-    public Rectangle getBounds() {
-	return new Rectangle(0, 0, width, height);
-    }
-
-    /**
-     * Dispatch an event received by a servlet.
-     * 
-     * @param data
-     */
-    public void dispatchEvent(EventData data) {
-	try {
-	    SunToolkit.awtLock();
-
-	    WebToolkit toolkit = ((WebToolkit) WebToolkit.getDefaultToolkit());
-	    WebWindowFactory factory = (WebWindowFactory) toolkit.getPlatformWindowFactory();
-	    ScreenManagedWindowContainer windowContainer = factory.getScreenManagedWindowContainer(this);
-	    if (windowContainer != null) {
-		data.setSource(windowContainer);
-		windowContainer.dispatchEvent(data);
-	    }
-	} finally {
-	    SunToolkit.awtUnlock();
+	public WebScreen() {
+		screenLock = new ReentrantLock();
+		screenCondition = screenLock.newCondition();
+		pendingUpdateList = new ArrayList<ScreenUpdate>();
 	}
 
-    }
+	public Graphics2D getClippedGraphics(Color fg, Color bg, Font font,
+			List<Rectangle> clipRects) {
 
-    /**
-     * Get the WebSurfaceData, or initialize one if it doesn't yet exist.
-     * 
-     * @return
-     */
-    public synchronized WebSurfaceData getSurfaceData() {
-	if (surfaceData == null) {
-		System.out.println("Starting to set Surface");
-	    surfaceData = new WebSurfaceData(this, WebSurfaceData.typeDefault, getColorModel(), getBounds(), getGraphicsConfiguration(), this);
-	    System.out.println("Surface Data Set");
+		WebSurfaceData data = getSurfaceData();
+		Graphics2D g2d = new SunGraphics2D(data, fg, bg, font);
+		if (clipRects != null && clipRects.size() > 0) {
+			Area a = new Area(getBounds());
+			for (Rectangle clip : clipRects) {
+				a.subtract(new Area(clip));
+			}
+			g2d = new WindowClippedGraphics(g2d, a);
+		}
+		return g2d;
 	}
-	return surfaceData;
-    }
 
-    private native final long nativeInitScreen(int width, int height);
-
-    public WebGraphicsConfiguration getConfig() {
-	return config;
-    }
-
-    /**
-     * Resizes the screen by discarding the current WebSurfaceData inculding all
-     * pending ScreenUpdates, initializing a WebSurfaceData with the requested
-     * size, and issuing a repaint command for all Windows.
-     * 
-     * @param width
-     * @param height
-     */
-    public void resizeScreen(int width, int height) {
-	try {
-	    SunToolkit.awtLock();
-	    lockScreen();
-	    this.width = width;
-	    this.height = height;
-
-	    surfaceData = new WebSurfaceData(this, WebSurfaceData.typeDefault, getColorModel(), getBounds(), getGraphicsConfiguration(), this);
-	    ((WebWindowFactory) ((WebToolkit) WebToolkit.getDefaultToolkit()).getPlatformWindowFactory()).repaintScreen(this);
-	} finally {
-	    SunToolkit.awtUnlock();
-	    unlockScreen();
+	public ColorModel getColorModel() {
+		return getGraphicsConfiguration().getColorModel();
 	}
-    }
 
-    /**
-     * Grabs the screen-lock
-     */
-    public final void lockScreen() {
-	screenLock.lock();
-    }
+	public GraphicsConfiguration getGraphicsConfiguration() {
+		return config;
+	}
 
-    /**
-     * Releases the screen-lock
-     */
-    public final void unlockScreen() {
-	screenLock.unlock();
-    }
+	public Rectangle getBounds() {
+		return new Rectangle(0, 0, width, height);
+	}
 
-    /**
-     * Signall a possible waiting thread
-     */
-    public final void signalScreen() {
-	screenCondition.signal();
-    }
-
-    /**
-     * Polls the WebScreen for pending updates. - Returns immediatly if pending
-     * updates are available - Waits up to timeout seconds, of no updates are
-     * available.
-     * 
-     * @param response
-     *            - the HttpServletResponse the updates will be written to
-     * @param timeout
-     * @throws IOException
-     */
-    public Transport pollForScreenUpdates(int timeout) throws IOException {
-	
-	boolean updatesWritten = false;
-	try {
-	    lockScreen();
-	    updatesWritten = prepareScreenUpdates();
-
-	    if (!updatesWritten) {
+	/**
+	 * Dispatch an event received by a servlet.
+	 * 
+	 * @param data
+	 */
+	public void dispatchEvent(EventData data) {
 		try {
-		    boolean signalled = screenCondition.await(timeout, TimeUnit.MILLISECONDS);
+			SunToolkit.awtLock();
 
-		    /*
-		     * If we had to wait, we quite likely have been waked by the
-		     * first operation. Usually (e.g. Swing) many draw-commands
-		     * are executed closely together, so we wait just a little
-		     * longer, so we can send a larger batch down.
-		     * In order to allow the rendering thread to do its job, we have
-		     * to unlock the screen however.
-		     */
-		    if (signalled) {
-			unlockScreen();
-			Thread.sleep(10);
+			WebToolkit toolkit = ((WebToolkit) WebToolkit.getDefaultToolkit());
+			WebWindowFactory factory = (WebWindowFactory) toolkit
+					.getPlatformWindowFactory();
+			ScreenManagedWindowContainer windowContainer = factory
+					.getScreenManagedWindowContainer(this);
+			if (windowContainer != null) {
+				data.setSource(windowContainer);
+				windowContainer.dispatchEvent(data);
+			}
+		} finally {
+			SunToolkit.awtUnlock();
+		}
+
+	}
+
+	/**
+	 * Get the WebSurfaceData, or initialize one if it doesn't yet exist.
+	 * 
+	 * @return
+	 */
+	public synchronized WebSurfaceData getSurfaceData() {
+		if (surfaceData == null) {
+//			System.out.println("Starting to set Surface");
+//			try {
+//				
+				surfaceData = new WebSurfaceData(this,
+						WebSurfaceData.typeDefault, getColorModel(),
+						getBounds(), getGraphicsConfiguration(), this);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			} finally {
+//				System.out.println("Surface Data Set");
+//			}
+		}
+		return surfaceData;
+	}
+
+	private native final long nativeInitScreen(int width, int height);
+
+	public WebGraphicsConfiguration getConfig() {
+		return config;
+	}
+
+	/**
+	 * Resizes the screen by discarding the current WebSurfaceData inculding all
+	 * pending ScreenUpdates, initializing a WebSurfaceData with the requested
+	 * size, and issuing a repaint command for all Windows.
+	 * 
+	 * @param width
+	 * @param height
+	 */
+	public void resizeScreen(int width, int height) {
+		try {
+			SunToolkit.awtLock();
 			lockScreen();
-		    }
-		} catch (InterruptedException e) {
-		    e.printStackTrace();
+			this.width = width;
+			this.height = height;
+
+			surfaceData = new WebSurfaceData(this, WebSurfaceData.typeDefault,
+					getColorModel(), getBounds(), getGraphicsConfiguration(),
+					this);
+			((WebWindowFactory) ((WebToolkit) WebToolkit.getDefaultToolkit())
+					.getPlatformWindowFactory()).repaintScreen(this);
+		} finally {
+			SunToolkit.awtUnlock();
+			unlockScreen();
+		}
+	}
+
+	/**
+	 * Grabs the screen-lock
+	 */
+	public final void lockScreen() {
+		screenLock.lock();
+	}
+
+	/**
+	 * Releases the screen-lock
+	 */
+	public final void unlockScreen() {
+		screenLock.unlock();
+	}
+
+	/**
+	 * Signall a possible waiting thread
+	 */
+	public final void signalScreen() {
+		screenCondition.signal();
+	}
+
+	/**
+	 * Polls the WebScreen for pending updates. - Returns immediatly if pending
+	 * updates are available - Waits up to timeout seconds, of no updates are
+	 * available.
+	 * 
+	 * @param response
+	 *            - the HttpServletResponse the updates will be written to
+	 * @param timeout
+	 * @throws IOException
+	 */
+	public Transport pollForScreenUpdates(int timeout) throws IOException {
+
+		boolean updatesWritten = false;
+		try {
+			lockScreen();
+			updatesWritten = prepareScreenUpdates();
+
+			if (!updatesWritten) {
+				try {
+					boolean signalled = screenCondition.await(timeout,
+							TimeUnit.MILLISECONDS);
+
+					/*
+					 * If we had to wait, we quite likely have been waked by the
+					 * first operation. Usually (e.g. Swing) many draw-commands
+					 * are executed closely together, so we wait just a little
+					 * longer, so we can send a larger batch down. In order to
+					 * allow the rendering thread to do its job, we have to
+					 * unlock the screen however.
+					 */
+					if (signalled) {
+						unlockScreen();
+						Thread.sleep(10);
+						lockScreen();
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				updatesWritten = prepareScreenUpdates();
+			}
+		} finally {
+			unlockScreen();
 		}
 
-		updatesWritten = prepareScreenUpdates();
-	    }
-	} finally {
-	    unlockScreen();
+		return encoder;
 	}
 
-	return encoder;
-    }
-
-
-    /**
-     * If ScreenUpdates are pending, preserve/encode pending them,
-     * so the ScreenLock can be released and rendering can continue.
-     * 
-     * @param os
-     *            the OUtputStream the pending updates are written to
-     * @return true if updates have been written, false if no updates were
-     *         pending.
-     * @throws IOException
-     */
-    protected boolean prepareScreenUpdates() {
-	if (surfaceData == null) {
-	    return false;
-	}
-
-	try {
-	    lockScreen();
-	    
-	    encoder = getEncoder();
-	    
-	    List<ScreenUpdate> screenUpdates = surfaceData.fetchPendingSurfaceUpdates();
-	    if (screenUpdates != null) {
-		pendingUpdateList.addAll(screenUpdates);
-	    }
-
-	    if (pendingUpdateList.size() > 0) {
-		ArrayList<Integer> cmdList = new ArrayList<Integer>(pendingUpdateList.size() * 7);
-
-		// Refactor
-		TreeImagePacker packer = new TreeImagePacker();
-		packer.insertScreenUpdateList(pendingUpdateList);
-		for (ScreenUpdate update : pendingUpdateList) {
-		    // System.out.println(update);
-		    update.writeToCmdStream(cmdList);
+	/**
+	 * If ScreenUpdates are pending, preserve/encode pending them, so the
+	 * ScreenLock can be released and rendering can continue.
+	 * 
+	 * @param os
+	 *            the OUtputStream the pending updates are written to
+	 * @return true if updates have been written, false if no updates were
+	 *         pending.
+	 * @throws IOException
+	 */
+	protected boolean prepareScreenUpdates() {
+		if (surfaceData == null) {
+			return false;
 		}
 
-		// Write updates to us
-		encoder.prepareUpdate(pendingUpdateList, packer, cmdList);
-		pendingUpdateList.clear();
+		try {
+			lockScreen();
 
-		return true;
-	    }
-	} finally {
-	    unlockScreen();
+			encoder = getEncoder();
+
+			List<ScreenUpdate> screenUpdates = surfaceData
+					.fetchPendingSurfaceUpdates();
+			if (screenUpdates != null) {
+				pendingUpdateList.addAll(screenUpdates);
+			}
+
+			if (pendingUpdateList.size() > 0) {
+				ArrayList<Integer> cmdList = new ArrayList<Integer>(
+						pendingUpdateList.size() * 7);
+
+				// Refactor
+				TreeImagePacker packer = new TreeImagePacker();
+				packer.insertScreenUpdateList(pendingUpdateList);
+				for (ScreenUpdate update : pendingUpdateList) {
+					// System.out.println(update);
+					update.writeToCmdStream(cmdList);
+				}
+
+				// Write updates to us
+				encoder.prepareUpdate(pendingUpdateList, packer, cmdList);
+				pendingUpdateList.clear();
+
+				return true;
+			}
+		} finally {
+			unlockScreen();
+		}
+
+		return false;
 	}
 
-	return false;
-    }
+	public ArrayList<ScreenUpdate> getPendingUpdateList() {
+		return pendingUpdateList;
+	}
 
-    public ArrayList<ScreenUpdate> getPendingUpdateList() {
-	return pendingUpdateList;
-    }
-    
-    protected Transport getEncoder() {
-    	return WebSessionManager.getInstance().getCurrentState().getBackend();
-    }
+	protected Transport getEncoder() {
+		return WebSessionManager.getInstance().getCurrentState().getBackend();
+	}
 }
 // try {
 // BinaryRLEStreamEncoder rleEncoder = new
