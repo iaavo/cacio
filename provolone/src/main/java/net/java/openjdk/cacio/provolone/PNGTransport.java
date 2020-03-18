@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -45,16 +46,17 @@ public class PNGTransport extends Transport {
 				os.write(intToByteArray(cmdList.get(i)));
 			}
 			// get image binary data
-			ByteArrayOutputStream bScrn = new ByteArrayOutputStream();
-			ImageIO.write(this.packedImage, "PNG", bScrn);
-			byte data[] = bScrn.toByteArray();
-			bScrn.close();
-			// send image size
-			int size = data.length;
-			os.write(intToByteArray(size));
-			// Send Image data
-			os.write(data);
-			
+			if (packedImage != null) {
+				ByteArrayOutputStream bScrn = new ByteArrayOutputStream();
+				ImageIO.write(this.packedImage, "PNG", bScrn);
+				byte data[] = bScrn.toByteArray();
+				bScrn.close();
+				// send image size
+				int size = data.length;
+				os.write(intToByteArray(size));
+				// Send Image data
+				os.write(data);
+			}
 		} else {
 			os.write(emptyResponseData);
 		}
@@ -67,5 +69,14 @@ public class PNGTransport extends Transport {
 			b[i] = (byte) ((value >>> offset) & 0xFF);
 		}
 		return b;
+	}
+
+	@Override
+	public String asString() {
+		String string = "";
+		for(int cmdInt : cmdList) {
+			string += cmdInt + " ";
+		}
+		return string;
 	}
 }

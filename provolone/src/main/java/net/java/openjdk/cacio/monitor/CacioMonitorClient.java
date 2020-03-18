@@ -1,7 +1,6 @@
 package net.java.openjdk.cacio.monitor;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
@@ -110,6 +109,7 @@ public class CacioMonitorClient {
 						while (true) {
 							// Receive the type of update
 							int type = readInt(is);
+//							System.out.println(type);
 							if (type == 0) {
 								int x1 = readInt(is);
 								int y1 = readInt(is);
@@ -152,6 +152,7 @@ public class CacioMonitorClient {
 								int clipWidth = readInt(is);
 								int clipHeight = readInt(is);
 								int size = readInt(is);
+								System.out.println(size);
 								if (size < 0) {
 									throw new IOException(
 											"Insufficient data in stream");

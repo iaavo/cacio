@@ -60,7 +60,10 @@ public class CacioMonitorServerBurster {
 						Transport encoder = PTPScreen.getInstance().pollForScreenUpdates(15000);
 						
 						encoder.writeToStream(os);
+						
 						os.flush();
+						
+						System.out.println(encoder.asString());
 						// Wait for next image
 						try {
 							Thread.sleep((long) (1000 / FPS));

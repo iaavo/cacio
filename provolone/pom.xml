@@ -28,26 +28,6 @@
 			<artifactId>fest-swing-junit-4.5</artifactId>
 			<version>1.2.1</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>8.0.1.v20110908</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<version>8.0.1.v20110908</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-websocket</artifactId>
-			<version>8.0.1.v20110908</version>
-		</dependency>
 	</dependencies>
 
 	<!-- get every artifact through repo.jenkins-ci.org, which proxies all the 
