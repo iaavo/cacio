@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,6 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+
+import net.java.openjdk.awt.peer.web.BlitScreenUpdate;
+import net.java.openjdk.awt.peer.web.WebRect;
 
 public class CacioMonitorClient {
 
@@ -82,40 +87,40 @@ public class CacioMonitorClient {
 		// this.panel.setBackground(Color.BLACK);
 		panel.setIcon(new ImageIcon(completeImage));
 		panel.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
-//				try {
-//					os.write(1);
-//					os.flush();
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
+				// try {
+				// os.write(1);
+				// os.flush();
+				// } catch (IOException e1) {
+				// // TODO Auto-generated catch block
+				// e1.printStackTrace();
+				// }
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		frame.add(this.panel, BorderLayout.CENTER);
@@ -152,55 +157,65 @@ public class CacioMonitorClient {
 						while (true) {
 							// Receive the type of update
 							int type = readInt(is);
-							System.out.println("Type: " + type);
+//							System.out.println("Type: " + type);
 							if (type == 0) {
+								List<BlitScreenUpdate> commands = new ArrayList<BlitScreenUpdate>();
 								int x1 = readInt(is);
 								int y1 = readInt(is);
 								int x2 = readInt(is);
 								int y2 = readInt(is);
 								int packedX = readInt(is);
 								int packedY = readInt(is);
-								int size = readInt(is);
-								while(size==0) {
+								int size;
+								commands.add(new BlitScreenUpdate(x1, y1,
+										packedX, packedY, Math.abs(x2 - x1),
+										Math.abs(y2 - y1), null));
+								while ((size = readInt(is)) == 0) {
 									x1 = readInt(is);
 									y1 = readInt(is);
 									x2 = readInt(is);
 									y2 = readInt(is);
 									packedX = readInt(is);
 									packedY = readInt(is);
-									size = readInt(is);
+									commands.add(new BlitScreenUpdate(x1, y1,
+											packedX, packedY,
+											Math.abs(x2 - x1), Math
+													.abs(y2 - y1), null));
 								}
-								System.out.println("T" + type + " " + x1 + "," + y1 + "," + x2
-										+ "," + y2 + ";" + packedX + ","
-										+ packedY + ":" + size);
 								if (size < 0) {
 									throw new IOException(
 											"Insufficient data in stream");
 								}
-								if (size > 0) {
-									// Receive Image data
-									byte[] data = new byte[size];
-									int index = 0;
-									while (index < size) {
-										int bytesRead = is.read(data, index,
-												size - index);
-										if (bytesRead < 0) {
-											throw new IOException(
-													"Insufficient data in stream");
-										}
-										index += bytesRead;
+								// Receive Image data
+								byte[] data = new byte[size];
+								int index = 0;
+								while (index < size) {
+									int bytesRead = is.read(data, index, size
+											- index);
+									if (bytesRead < 0) {
+										throw new IOException(
+												"Insufficient data in stream");
 									}
+									index += bytesRead;
+								}
 
-									appendStatus(" received");
-									// Set the image
-									BufferedImage image = ImageIO
-											.read(new ByteArrayInputStream(data));
-									
+								appendStatus(" received");
+								// Set the image
+								BufferedImage image = ImageIO
+										.read(new ByteArrayInputStream(data));
+
+								for (BlitScreenUpdate u : commands) {
+									WebRect r = u.getUpdateArea();
 									completeImage.getGraphics().drawImage(
-											image, 0, 0, null);
+											image, r.getX1(), r.getY1(),
+											r.getX2(), r.getY2(), u.getSrcX(),
+											u.getSrcY(),
+											u.getSrcX() + r.getWidth(),
+											u.getSrcY() + r.getHeight(), null);
+
 								}
 							}
-							
+
 							// send OK
 							os.write(1);
 							os.flush();
@@ -224,6 +239,8 @@ public class CacioMonitorClient {
 						e.printStackTrace();
 					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				try {
 					setStatus("Disconnected");

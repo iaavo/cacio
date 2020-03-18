@@ -71,20 +71,6 @@ import java.net.*;
  * @author Jeff Dinkins
  */
 public class SwingSet2 extends JPanel {
-
-	static {
-		System.setProperty("awt.toolkit", PTPToolkit.class.getName());
-		System.setProperty("java.awt.graphicsenv",
-				PTPGraphicsEnvironment.class.getName());
-		System.setProperty("java.awt.headless", "false");
-		
-		try {
-			new CacioMonitorServerBurster(8081, 125);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 	
     String[] demos = {
       "ButtonDemo",
