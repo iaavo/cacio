@@ -1,6 +1,10 @@
 package net.java.openjdk.cacio.monitor;
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,9 +17,11 @@ public class CacioMonitorServerBurster {
 
 	private final Thread thread;
 
+	private FileWriter fw;
+
 	public static final int PORT = 3141;
 
-	public static final double FPS = 30;
+	public static final double FPS = 2;
 
 	public CacioMonitorServerBurster(int port, int j) {
 		this.thread = new Thread(new Runnable() {
@@ -23,7 +29,7 @@ public class CacioMonitorServerBurster {
 			public void run() {
 				sendImages();
 			}
-		});
+		}, "Server");
 		this.thread.start();
 	}
 
@@ -52,23 +58,44 @@ public class CacioMonitorServerBurster {
 					}
 				}
 				// Send Images
+				fw = new FileWriter(new File("test.log"));
+				OutputStream os2 = new OutputStream() {
+					int i = 0;
+					int ch[] = new int[4];
+					
+					@Override
+					public void write(int b) throws IOException {
+						ch[i] = b;
+						i++;
+						if(i==4) {
+							i = 0;
+							fw.write(((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0)) + " ");
+						}
+					}
+					@Override
+					public void flush() throws IOException {
+						super.flush();
+						fw.write('\n');
+					}
+				};
+				
+				
 				while (socket != null && !socket.isClosed()
 						&& socket.isConnected()) {
 					try {
 						OutputStream os = socket.getOutputStream();
+						InputStream is = socket.getInputStream();
 						
 						Transport encoder = PTPScreen.getInstance().pollForScreenUpdates(15000);
 						
 						encoder.writeToStream(os);
-						
+						encoder.writeToStream(os2);
 						os.flush();
+						os2.flush();
 						
-						System.out.println(encoder.asString());
 						// Wait for next image
-						try {
-							Thread.sleep((long) (1000 / FPS));
-						} catch (Exception e) {
-							e.printStackTrace();
+						while(is.read() != 1) {
+							
 						}
 					} catch (SocketException e) {
 						e.printStackTrace();
@@ -82,7 +109,17 @@ public class CacioMonitorServerBurster {
 						e1.printStackTrace();
 					}
 				}
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			} finally {
+				if(fw!=null)
+					try {
+						fw.close();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				try {
 					if (socket != null) {
 						socket.close();

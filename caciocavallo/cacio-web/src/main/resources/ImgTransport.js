@@ -132,7 +132,7 @@ function readImgData(height) {
 /**
  * getImageData is used to retrieve the command-stream out of the
  * png-image it is embedded in.
- * Therefor the image is first rendered to a canvas, then the
+ * Therefore the image is first rendered to a canvas, then the
  * image-data is read back using canvas.getImageData().
  * 
  * The command-stream can also span multiple rows.

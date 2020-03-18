@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -15,7 +14,7 @@ import net.java.openjdk.awt.peer.web.WebRect;
 import net.java.openjdk.cacio.servlet.transport.Transport;
 
 public class PNGTransport extends Transport {
-	private static byte[] emptyResponseData = "0".getBytes();
+	private final byte[] emptyResponseData = intToByteArray(-1);
 
 	private List<Integer> cmdList;
 	private BufferedImage packedImage;

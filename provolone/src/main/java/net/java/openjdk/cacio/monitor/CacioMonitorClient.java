@@ -1,11 +1,14 @@
 package net.java.openjdk.cacio.monitor;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -33,6 +36,8 @@ public class CacioMonitorClient {
 
 	private BufferedImage completeImage = new BufferedImage(1024, 768,
 			BufferedImage.TYPE_INT_RGB);
+
+	private OutputStream os;
 
 	public CacioMonitorClient() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -73,9 +78,46 @@ public class CacioMonitorClient {
 		this.panel = new JLabel();
 		this.panel.setHorizontalAlignment(SwingConstants.CENTER);
 		this.panel.setVerticalAlignment(SwingConstants.CENTER);
-//		this.panel.setOpaque(true);
-//		this.panel.setBackground(Color.BLACK);
+		// this.panel.setOpaque(true);
+		// this.panel.setBackground(Color.BLACK);
 		panel.setIcon(new ImageIcon(completeImage));
+		panel.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+//				try {
+//					os.write(1);
+//					os.flush();
+//				} catch (IOException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		frame.add(this.panel, BorderLayout.CENTER);
 	}
 
@@ -86,7 +128,7 @@ public class CacioMonitorClient {
 				// Connect
 				while (socket == null) {
 					try {
-//						this.panel.setIcon(null);
+						// this.panel.setIcon(null);
 						setStatus("Trying to connect...");
 						socket = new Socket("127.0.0.1",
 								CacioMonitorServer.PORT);
@@ -106,10 +148,11 @@ public class CacioMonitorClient {
 					try {
 						setStatus("Receive Image...");
 						InputStream is = socket.getInputStream();
+						os = socket.getOutputStream();
 						while (true) {
 							// Receive the type of update
 							int type = readInt(is);
-//							System.out.println(type);
+							System.out.println("Type: " + type);
 							if (type == 0) {
 								int x1 = readInt(is);
 								int y1 = readInt(is);
@@ -118,66 +161,49 @@ public class CacioMonitorClient {
 								int packedX = readInt(is);
 								int packedY = readInt(is);
 								int size = readInt(is);
+								while(size==0) {
+									x1 = readInt(is);
+									y1 = readInt(is);
+									x2 = readInt(is);
+									y2 = readInt(is);
+									packedX = readInt(is);
+									packedY = readInt(is);
+									size = readInt(is);
+								}
+								System.out.println("T" + type + " " + x1 + "," + y1 + "," + x2
+										+ "," + y2 + ";" + packedX + ","
+										+ packedY + ":" + size);
 								if (size < 0) {
 									throw new IOException(
 											"Insufficient data in stream");
 								}
-								// Receive Image data
-								byte[] data = new byte[size];
-								int index = 0;
-								while (index < size) {
-									int bytesRead = is.read(data, index, size
-											- index);
-									if (bytesRead < 0) {
-										throw new IOException(
-												"Insufficient data in stream");
+								if (size > 0) {
+									// Receive Image data
+									byte[] data = new byte[size];
+									int index = 0;
+									while (index < size) {
+										int bytesRead = is.read(data, index,
+												size - index);
+										if (bytesRead < 0) {
+											throw new IOException(
+													"Insufficient data in stream");
+										}
+										index += bytesRead;
 									}
-									index += bytesRead;
+
+									appendStatus(" received");
+									// Set the image
+									BufferedImage image = ImageIO
+											.read(new ByteArrayInputStream(data));
+									
+									completeImage.getGraphics().drawImage(
+											image, 0, 0, null);
 								}
-								appendStatus(" received");
-								// Set the image
-								BufferedImage image = ImageIO
-										.read(new ByteArrayInputStream(data));
-								completeImage.getGraphics().drawImage(image,
-										0, 0, null);
-							} else if (type == 1) {
-								int x1 = readInt(is);
-								int y1 = readInt(is);
-								int x2 = readInt(is);
-								int y2 = readInt(is);
-								int dx = readInt(is);
-								int dy = readInt(is);
-								int clipLoX = readInt(is);
-								int clipLoY = readInt(is);
-								int clipWidth = readInt(is);
-								int clipHeight = readInt(is);
-								int size = readInt(is);
-								System.out.println(size);
-								if (size < 0) {
-									throw new IOException(
-											"Insufficient data in stream");
-								}
-								// Receive Image data
-								byte[] data = new byte[size];
-								int index = 0;
-								while (index < size) {
-									int bytesRead = is.read(data, index, size
-											- index);
-									if (bytesRead < 0) {
-										throw new IOException(
-												"Insufficient data in stream");
-									}
-									index += bytesRead;
-								}
-								appendStatus(" received");
-								// Set the image
-								BufferedImage image = ImageIO
-										.read(new ByteArrayInputStream(data));
-//								completeImage.getGraphics().drawImage(image,
-//										0, 0, null);
 							}
 							
-							// is.close();
+							// send OK
+							os.write(1);
+							os.flush();
 
 							this.panel.repaint();
 							appendStatus(" and painted.");

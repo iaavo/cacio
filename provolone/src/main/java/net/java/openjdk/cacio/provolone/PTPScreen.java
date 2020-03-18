@@ -32,6 +32,8 @@ import java.awt.Rectangle;
 
 import net.java.openjdk.awt.peer.web.WebGraphicsConfiguration;
 import net.java.openjdk.awt.peer.web.WebScreen;
+import net.java.openjdk.cacio.servlet.transport.BinaryRLETransport;
+import net.java.openjdk.cacio.servlet.transport.ImageTransport;
 import net.java.openjdk.cacio.servlet.transport.Transport;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
 
