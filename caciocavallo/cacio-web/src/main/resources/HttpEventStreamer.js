@@ -40,7 +40,7 @@ function sendEventsXHR() {
               eventXmlHttpReq.send(localEvents);
           }
         }
-			 
+		
         window.setTimeout("sendEventsXHR()", dispatchDelay);
 }
 

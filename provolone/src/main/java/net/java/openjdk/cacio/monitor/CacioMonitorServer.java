@@ -99,7 +99,6 @@ public class CacioMonitorServer {
 				}
 			}
 		}
-
 	}
 
 	private byte[] intToByteArray(int value) {

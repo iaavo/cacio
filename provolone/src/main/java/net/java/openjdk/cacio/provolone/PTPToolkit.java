@@ -53,7 +53,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.java.openjdk.cacio.ctc.CTCEventSource;
-import net.java.openjdk.cacio.ctc.CTCRobotPeer;
 import sun.awt.peer.cacio.CacioToolkit;
 import sun.awt.peer.cacio.PlatformWindowFactory;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;

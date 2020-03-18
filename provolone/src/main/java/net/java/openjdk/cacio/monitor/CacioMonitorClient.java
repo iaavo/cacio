@@ -172,8 +172,8 @@ public class CacioMonitorClient {
 								// Set the image
 								BufferedImage image = ImageIO
 										.read(new ByteArrayInputStream(data));
-								completeImage.getGraphics().drawImage(image,
-										0, 0, null);
+//								completeImage.getGraphics().drawImage(image,
+//										0, 0, null);
 							}
 							
 							// is.close();
