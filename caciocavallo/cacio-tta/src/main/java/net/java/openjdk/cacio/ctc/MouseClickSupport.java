@@ -29,14 +29,14 @@ import java.awt.event.MouseEvent;
 
 import sun.awt.peer.cacio.managed.EventData;
 
-class MouseClickSupport {
+public class MouseClickSupport {
 
     private static final long MULTI_CLICK_THRESHOLD = 400;
 
     private EventData lastPress;
     private int clickCount;
 
-    void mouseEvent(EventData ev) {
+    public void mouseEvent(EventData ev) {
         switch (ev.getId()) {
         case MouseEvent.MOUSE_PRESSED:
             handlePress(ev);
@@ -85,7 +85,7 @@ class MouseClickSupport {
                && lastPress.getY() == ev.getY();
     }
 
-    int getClickCount() {
+    public int getClickCount() {
         return clickCount;
     }
 }

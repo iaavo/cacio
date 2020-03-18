@@ -15,7 +15,7 @@ public class CacioMonitorServerBurster {
 
 	public static final int PORT = 3141;
 
-	public static final double FPS = 0.1;
+	public static final double FPS = 30;
 
 	public CacioMonitorServerBurster(int port, int j) {
 		this.thread = new Thread(new Runnable() {

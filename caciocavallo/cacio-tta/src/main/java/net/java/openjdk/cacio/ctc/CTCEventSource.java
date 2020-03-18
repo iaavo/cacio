@@ -10,7 +10,7 @@ public class CTCEventSource implements CacioEventSource {
 
     private static CTCEventSource instance;
 
-    static CTCEventSource getInstance() {
+    public static CTCEventSource getInstance() {
         if (instance == null) {
             instance = new CTCEventSource();
         }
@@ -28,7 +28,7 @@ public class CTCEventSource implements CacioEventSource {
         return queue.take();
     }
 
-    void postEvent(EventData ev) {
+    public void postEvent(EventData ev) {
         queue.offer(ev);
     }
 }

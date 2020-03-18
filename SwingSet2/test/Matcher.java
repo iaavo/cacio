@@ -114,4 +114,9 @@ public class Matcher<T extends JComponent> extends GenericTypeMatcher<T> {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return supportedType().getSimpleName() + "<" + data + ">";
+	}
 }

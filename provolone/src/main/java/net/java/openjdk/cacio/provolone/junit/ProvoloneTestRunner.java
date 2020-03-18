@@ -5,6 +5,8 @@ import static org.fest.swing.junit.runner.Formatter.testNameFrom;
 
 import java.lang.reflect.Method;
 
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
 import net.java.openjdk.cacio.monitor.CacioMonitorServerBurster;
 import net.java.openjdk.cacio.provolone.PTPGraphicsEnvironment;
 import net.java.openjdk.cacio.provolone.PTPToolkit;
@@ -23,6 +25,7 @@ public class ProvoloneTestRunner extends BlockJUnit4ClassRunner {
 		System.setProperty("java.awt.graphicsenv",
 				PTPGraphicsEnvironment.class.getName());
 		System.setProperty("java.awt.headless", "false");
+        System.setProperty("swing.defaultlaf", MetalLookAndFeel.class.getName());
 
 		try {
 			new CacioMonitorServerBurster(8081, 125);

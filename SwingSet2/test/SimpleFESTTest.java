@@ -1,5 +1,6 @@
 import java.awt.GraphicsEnvironment;
 
+import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
 import net.java.openjdk.cacio.provolone.junit.ProvoloneTestRunner;
 
 import org.fest.swing.annotation.GUITest;

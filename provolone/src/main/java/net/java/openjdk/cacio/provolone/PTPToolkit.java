@@ -52,6 +52,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.java.openjdk.cacio.ctc.CTCEventSource;
 import net.java.openjdk.cacio.ctc.CTCRobotPeer;
 import sun.awt.peer.cacio.CacioToolkit;
 import sun.awt.peer.cacio.PlatformWindowFactory;
@@ -82,7 +83,7 @@ public class PTPToolkit extends CacioToolkit {
     public synchronized PlatformWindowFactory getPlatformWindowFactory() {
         if (platformWindowFactory == null) {
             PTPScreen screen = PTPScreen.getInstance();
-            PTPEventSource eventSource = PTPEventSource.getInstance();
+            CTCEventSource eventSource = CTCEventSource.getInstance();
             platformWindowFactory = new FullScreenWindowFactory(screen, eventSource);
           }
           return platformWindowFactory;
@@ -115,7 +116,7 @@ public class PTPToolkit extends CacioToolkit {
 
     @Override
     public RobotPeer createRobot(Robot target, GraphicsDevice screen) throws AWTException {
-        return new CTCRobotPeer();
+        return new PTPRobotPeer();
     }
 
     @Override
