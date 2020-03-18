@@ -5,12 +5,6 @@ import static org.fest.swing.junit.runner.Formatter.testNameFrom;
 
 import java.lang.reflect.Method;
 
-import javax.swing.plaf.metal.MetalLookAndFeel;
-
-import net.java.openjdk.cacio.provolone.PTPGraphicsEnvironment;
-import net.java.openjdk.cacio.provolone.PTPToolkit;
-import net.java.openjdk.cacio.provolone.server.ProvoloneServer;
-
 import org.fest.swing.junit.runner.FailureScreenshotTaker;
 import org.fest.swing.junit.runner.ImageFolderCreator;
 import org.junit.runners.BlockJUnit4ClassRunner;
@@ -22,7 +16,8 @@ public class ProvoloneTestRunner extends BlockJUnit4ClassRunner {
 
     static {
         try {
-			new ProvoloneServer(8081, 125);
+        	// TODO
+//			new ProvoloneServer(8081, 125);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

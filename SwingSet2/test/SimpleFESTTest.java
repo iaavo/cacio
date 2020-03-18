@@ -1,7 +1,5 @@
 import java.awt.GraphicsEnvironment;
 
-import net.java.openjdk.cacio.provolone.junit.ProvoloneTestRunner;
-
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiTask;
@@ -10,9 +8,8 @@ import org.fest.swing.fixture.JInternalFrameFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(ProvoloneTestRunner.class)
+//@RunWith(ProvoloneTestRunner.class)
 public class SimpleFESTTest {
 
     private FrameFixture ff;

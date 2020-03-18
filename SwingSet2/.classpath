@@ -5,6 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Fest"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/provolone"/>
+	<classpathentry kind="lib" path="lib/testInProgress-client-1.1.jar" sourcepath="C:/Users/Albert.Flaig/.m2/repository/org/jenkins-ci/plugins/testInProgress-client/1.1/testInProgress-client-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cacio-tta-1.3r3(1).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
