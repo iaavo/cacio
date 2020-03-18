@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry combineaccessrules="false" kind="src" path="/cacio-shared"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/cacio-tta"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/cacio-web"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -58,5 +57,6 @@
 	<classpathentry kind="lib" path="lib/jetty-servlets-8.1.4.v20120524.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-webapp-8.1.4.v20120524.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-xml-8.1.4.v20120524.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cacio-web"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

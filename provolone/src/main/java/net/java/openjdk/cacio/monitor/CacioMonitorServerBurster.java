@@ -1,6 +1,5 @@
 package net.java.openjdk.cacio.monitor;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,27 +11,19 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import net.java.openjdk.awt.peer.web.BlitScreenUpdate;
-import net.java.openjdk.awt.peer.web.GridDamageTracker;
 import net.java.openjdk.awt.peer.web.ScreenUpdate;
-import net.java.openjdk.awt.peer.web.TreeImagePacker;
-import net.java.openjdk.cacio.provolone.PTPGraphics;
+import net.java.openjdk.cacio.provolone.PTPScreen;
+import net.java.openjdk.cacio.servlet.transport.Transport;
 
 public class CacioMonitorServerBurster {
 
-	private final BufferedImage image;
-
 	private final Thread thread;
-
-	private final GridDamageTracker tracker;
 
 	public static final int PORT = 3141;
 
 	public static final double FPS = 0.1;
 
-	public CacioMonitorServerBurster(BufferedImage imgBuffer,
-			GridDamageTracker tracker) {
-		this.image = imgBuffer;
-		this.tracker = tracker;
+	public CacioMonitorServerBurster() {
 		this.thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -71,10 +62,9 @@ public class CacioMonitorServerBurster {
 						&& socket.isConnected()) {
 					try {
 						OutputStream os = socket.getOutputStream();
-
-						List<ScreenUpdate> screenUpdates = this.tracker
-								.groupDamagedAreas(this.image);
-
+						
+						Transport encoder = PTPScreen.getInstance().pollForScreenUpdates(15000);
+						
 						if (screenUpdates != null) {
 							// Send number of images
 							System.out.println("Send images");
@@ -129,7 +119,6 @@ public class CacioMonitorServerBurster {
 				}
 			}
 		}
-
 	}
 
 	private byte[] intToByteArray(int value) {

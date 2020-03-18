@@ -25,35 +25,40 @@
 
 package net.java.openjdk.cacio.provolone;
 
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
-import sun.java2d.SunGraphicsEnvironment;
-import sun.java2d.SurfaceManagerFactory;
 
 /**
- * Graphics Environment implementation for caciocavallo-web.
- *
+ * GraphicsDevice implementation for caciocavallo-web.
+ * 
  * @author Clemens Eisserer <linuxhippy@gmail.com>
- * @author Mario Torre <neugens.liamsoftware@gmail.com>
+ * @author Mario Torre <neugens.limasoftware@gmail.com>
  */
-public class PTPGraphicsEnvironment extends SunGraphicsEnvironment {
+class PTPGraphicsDevice extends GraphicsDevice {
 
-    static {
-        LibraryLoader.loadLibs();
-        SurfaceManagerFactory.setInstance(new PTPSurfaceManagerFactory());
-    }
+    private PTPGraphicsConfiguration defaultConfig;
+	
+	@Override
+	public int getType() {
+		return GraphicsDevice.TYPE_RASTER_SCREEN;
+	}
 
-    @Override
-    protected int getNumScreens() {
-        return 1;
-    }
+	@Override
+	public String getIDstring() {
+		return "Web Cacio Device";
+	}
 
-    @Override
-    protected GraphicsDevice makeScreenDevice(int screennum) {
-        return new PTPGraphicsDevice();
-    }
+	@Override
+	public GraphicsConfiguration[] getConfigurations() {
+		return new GraphicsConfiguration[] { getDefaultConfiguration() };
+	}
 
-    @Override
-    public boolean isDisplayLocal() {
-        return true;
-    }
+	@Override
+	public synchronized GraphicsConfiguration getDefaultConfiguration() {
+        if (defaultConfig == null) {
+            defaultConfig = new PTPGraphicsConfiguration(this);
+        }
+        return defaultConfig;
+	}
+
 }

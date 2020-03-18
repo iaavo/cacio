@@ -25,35 +25,20 @@
 
 package net.java.openjdk.cacio.provolone;
 
-import java.awt.GraphicsDevice;
-import sun.java2d.SunGraphicsEnvironment;
-import sun.java2d.SurfaceManagerFactory;
+import java.awt.*;
+import java.awt.peer.*;
 
 /**
- * Graphics Environment implementation for caciocavallo-web.
- *
+ * Rudimentary WebSystemTrayPeer Implementation for Caciocavallo-Web.
+ * Required for AppContext.dispose(), so give it one.
+ * 
  * @author Clemens Eisserer <linuxhippy@gmail.com>
- * @author Mario Torre <neugens.liamsoftware@gmail.com>
  */
-public class PTPGraphicsEnvironment extends SunGraphicsEnvironment {
-
-    static {
-        LibraryLoader.loadLibs();
-        SurfaceManagerFactory.setInstance(new PTPSurfaceManagerFactory());
-    }
+public class PTPSystemTrayPeer implements SystemTrayPeer {
 
     @Override
-    protected int getNumScreens() {
-        return 1;
+    public Dimension getTrayIconSize() {
+	return new Dimension(0, 0);
     }
 
-    @Override
-    protected GraphicsDevice makeScreenDevice(int screennum) {
-        return new PTPGraphicsDevice();
-    }
-
-    @Override
-    public boolean isDisplayLocal() {
-        return true;
-    }
 }

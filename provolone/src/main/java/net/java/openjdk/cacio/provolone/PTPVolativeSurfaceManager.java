@@ -25,35 +25,28 @@
 
 package net.java.openjdk.cacio.provolone;
 
-import java.awt.GraphicsDevice;
-import sun.java2d.SunGraphicsEnvironment;
-import sun.java2d.SurfaceManagerFactory;
+import sun.awt.image.SunVolatileImage;
+import sun.awt.image.VolatileSurfaceManager;
+import sun.java2d.SurfaceData;
 
 /**
- * Graphics Environment implementation for caciocavallo-web.
- *
+ * WebVolatileSurfaceManagerImplementation for Caciocavallo-Web.
+ * 
  * @author Clemens Eisserer <linuxhippy@gmail.com>
- * @author Mario Torre <neugens.liamsoftware@gmail.com>
  */
-public class PTPGraphicsEnvironment extends SunGraphicsEnvironment {
+class PTPVolativeSurfaceManager extends VolatileSurfaceManager {
 
-    static {
-        LibraryLoader.loadLibs();
-        SurfaceManagerFactory.setInstance(new PTPSurfaceManagerFactory());
+    PTPVolativeSurfaceManager(SunVolatileImage image, Object context) {
+        super(image, context);
     }
 
     @Override
-    protected int getNumScreens() {
-        return 1;
+    protected boolean isAccelerationEnabled() {
+       return false;
     }
 
     @Override
-    protected GraphicsDevice makeScreenDevice(int screennum) {
-        return new PTPGraphicsDevice();
-    }
-
-    @Override
-    public boolean isDisplayLocal() {
-        return true;
+    protected SurfaceData initAcceleratedSurface() {
+	return null;
     }
 }
