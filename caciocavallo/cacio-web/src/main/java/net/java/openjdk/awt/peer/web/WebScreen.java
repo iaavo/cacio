@@ -84,7 +84,13 @@ public class WebScreen implements PlatformScreen {
 	pendingUpdateList = new ArrayList<ScreenUpdate>();
     }
 
-    public Graphics2D getClippedGraphics(Color fg, Color bg, Font font, List<Rectangle> clipRects) {
+    public WebScreen() {
+    	screenLock = new ReentrantLock();
+    	screenCondition = screenLock.newCondition();
+    	pendingUpdateList = new ArrayList<ScreenUpdate>();
+	}
+
+	public Graphics2D getClippedGraphics(Color fg, Color bg, Font font, List<Rectangle> clipRects) {
 
 	WebSurfaceData data = getSurfaceData();
 	Graphics2D g2d = new SunGraphics2D(data, fg, bg, font);
@@ -137,9 +143,11 @@ public class WebScreen implements PlatformScreen {
      * 
      * @return
      */
-    public WebSurfaceData getSurfaceData() {
+    public synchronized WebSurfaceData getSurfaceData() {
 	if (surfaceData == null) {
+		System.out.println("Starting to set Surface");
 	    surfaceData = new WebSurfaceData(this, WebSurfaceData.typeDefault, getColorModel(), getBounds(), getGraphicsConfiguration(), this);
+	    System.out.println("Surface Data Set");
 	}
 	return surfaceData;
     }
@@ -260,7 +268,7 @@ public class WebScreen implements PlatformScreen {
 	try {
 	    lockScreen();
 	    
-	    encoder = WebSessionManager.getInstance().getCurrentState().getBackend();
+	    encoder = getEncoder();
 	    
 	    List<ScreenUpdate> screenUpdates = surfaceData.fetchPendingSurfaceUpdates();
 	    if (screenUpdates != null) {
@@ -294,8 +302,11 @@ public class WebScreen implements PlatformScreen {
     public ArrayList<ScreenUpdate> getPendingUpdateList() {
 	return pendingUpdateList;
     }
+    
+    protected Transport getEncoder() {
+    	return WebSessionManager.getInstance().getCurrentState().getBackend();
+    }
 }
-
 // try {
 // BinaryRLEStreamEncoder rleEncoder = new
 // BinaryRLEStreamEncoder();

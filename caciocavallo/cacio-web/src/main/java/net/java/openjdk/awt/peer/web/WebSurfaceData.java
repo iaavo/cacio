@@ -49,7 +49,7 @@ import sun.java2d.pipe.*;
  */
 public class WebSurfaceData extends SurfaceData {
 
-    static SurfaceType typeDefault = SurfaceType.IntRgb.deriveSubType("Cacio Web default");
+    public static SurfaceType typeDefault = SurfaceType.IntRgb.deriveSubType("Cacio Web default");
 
     static {
 	initIDs();
@@ -69,7 +69,7 @@ public class WebSurfaceData extends SurfaceData {
 
     List<ScreenUpdate> surfaceUpdateList;
 
-    protected WebSurfaceData(WebScreen screen, SurfaceType surfaceType, ColorModel cm, Rectangle b, GraphicsConfiguration gc, Object dest) {
+    public WebSurfaceData(WebScreen screen, SurfaceType surfaceType, ColorModel cm, Rectangle b, GraphicsConfiguration gc, Object dest) {
 
 	super(surfaceType, cm);
 
@@ -90,6 +90,7 @@ public class WebSurfaceData extends SurfaceData {
 	imgBufferSD = SurfaceManager.getManager(imgBuffer).getPrimarySurfaceData();
 
 	int imgStride = ((SinglePixelPackedSampleModel) imgBuffer.getSampleModel()).getScanlineStride() * 4;
+	System.out.println("InitOps");
 	initOps(data, w, h, imgStride);
     }
 

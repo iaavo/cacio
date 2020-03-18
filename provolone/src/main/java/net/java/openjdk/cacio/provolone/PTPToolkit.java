@@ -28,7 +28,6 @@ package net.java.openjdk.cacio.provolone;
 import java.awt.AWTException;
 import java.awt.Desktop;
 import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.HeadlessException;
 import java.awt.PrintJob;
@@ -36,7 +35,6 @@ import java.awt.Robot;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.Window;
-import java.awt.datatransfer.Clipboard;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.InvalidDnDOperationException;
 import java.awt.dnd.peer.DragSourceContextPeer;
@@ -55,7 +53,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.java.openjdk.cacio.ctc.CTCRobotPeer;
-
 import sun.awt.peer.cacio.CacioToolkit;
 import sun.awt.peer.cacio.PlatformWindowFactory;
 import sun.awt.peer.cacio.managed.FullScreenWindowFactory;
@@ -123,18 +120,12 @@ public class PTPToolkit extends CacioToolkit {
 
     @Override
     protected int getScreenWidth() {
-        
-        GraphicsConfiguration config =
-                PTPGraphicsConfiguration.getDefaultConfiguration();
-        return config.getBounds().width;
+        return FullScreenWindowFactory.getScreenDimension().width;
     }
 
     @Override
     protected int getScreenHeight() {
-        
-        GraphicsConfiguration config =
-                PTPGraphicsConfiguration.getDefaultConfiguration();
-        return config.getBounds().height;
+    	return FullScreenWindowFactory.getScreenDimension().height;
     }
 
     @Override
@@ -189,11 +180,6 @@ public class PTPToolkit extends CacioToolkit {
     @Override
     public void beep() {
         logger.log(Level.FINE, "BEEP");
-    }
-
-    @Override
-    public Clipboard getSystemClipboard() throws HeadlessException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

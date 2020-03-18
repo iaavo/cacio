@@ -28,7 +28,6 @@ package net.java.openjdk.cacio.provolone;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
@@ -47,20 +46,8 @@ public class PTPGraphicsConfiguration extends GraphicsConfiguration {
 
 	private PTPGraphicsDevice device;
 
-	public PTPGraphicsConfiguration() {
-		device = new PTPGraphicsDevice();
-	}
-
 	PTPGraphicsConfiguration(PTPGraphicsDevice device) {
 		this.device = device;
-	}
-
-	static GraphicsConfiguration getDefaultConfiguration() {
-		GraphicsEnvironment ge = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
-		GraphicsDevice gd = ge.getDefaultScreenDevice();
-		GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		return (PTPGraphicsConfiguration) gc;
 	}
 
 	@Override
